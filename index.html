@@ -1,309 +1,305 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cute Romantic Coupons</title>
-  <style>
-    body {
-      font-family: "Arial", sans-serif;
-      background: #ffeef4;
-      margin: 0;
-      padding: 20px;
-      color: #444;
-      overflow-x: hidden;
-    }
-    .container {
-      max-width: 650px;
-      margin: auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 20px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      animation: fadeIn 1s ease-in-out;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    h1 {
-      text-align: center;
-      color: #ff4f8b;
-      animation: pop 1s ease-in-out;
-    }
-    @keyframes pop {
-      0% { transform: scale(0.5); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-    .coupon {
-      background: #ffdef0;
-      padding: 15px;
-      margin: 15px 0;
-      border-radius: 15px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      animation: fadeIn 1s ease;
-    }
-    button {
-      background: #ff4f8b;
-      border: none;
-      padding: 10px 15px;
-      color: white;
-      border-radius: 10px;
-      cursor: pointer;
-    }
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Cupones Románticos</title>
+<style>
+  :root{
+    --bg:#fff7fa;
+    --card:#ffffff;
+    --accent:#ff4f8b;
+    --green:#28a745;
+    --muted:#bfbfc4;
+  }
+  body{
+    margin:0;
+    font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    background: linear-gradient(180deg,#fff4f8 0%, #ffeef4 100%);
+    color:#333;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{
+    max-width:980px;
+    margin:28px auto;
+    padding:18px;
+  }
+  header{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:14px;
+  }
+  .title{
+    font-size:20px;
+    font-weight:700;
+    color:var(--accent);
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .title-heart{
+    font-size:20px;
+    cursor:pointer;
+    user-select:none;
+  }
 
-    /* Floating hearts */
-    .heart {
-      position: fixed;
-      color: #ff4f8b;
-      font-size: 20px;
-      animation: floatUp 4s linear infinite;
-      opacity: 0.7;
-    }
-    @keyframes floatUp {
-      0% { transform: translateY(0) scale(1); opacity: 0.8; }
-      100% { transform: translateY(-800px) scale(1.8); opacity: 0; }
-    }
+  /* grid responsive */
+  .grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+    gap:14px;
+  }
 
-    /* Password modal */
-    #passwordModal {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.5);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      display: none;
-    }
-    #passwordBox {
-      background: #fff;
-      padding: 20px;
-      border-radius: 15px;
-      text-align: center;
-      width: 280px;
-    }
-    input {
-      padding: 8px;
-      width: 80%;
-      margin-bottom: 10px;
-      border-radius: 10px;
-      border: 1px solid #ccc;
-    }
+  .card{
+    background:var(--card);
+    border-radius:12px;
+    padding:12px;
+    box-shadow:0 6px 18px rgba(0,0,0,0.06);
+    display:flex;
+    gap:12px;
+    align-items:center;
+    transition:transform .12s ease, opacity .2s ease;
+  }
+  .card.ago { opacity:.5; transform:scale(.995); }
 
-    .cart {
-      margin-top: 30px;
-      padding: 20px;
-      background: #ffd9e8;
-      border-radius: 20px;
-    }
-  </style>
+  .thumb{
+    width:66px;
+    height:66px;
+    flex:0 0 66px;
+    border-radius:8px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:1px solid #111;
+    background:#fff;
+    overflow:hidden;
+  }
+  .thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+  .meta{ flex:1; min-width:0; }
+  .name{
+    font-weight:600;
+    font-size:15px;
+    color:#222;
+    line-height:1.1;
+  }
+  .stock{
+    font-size:13px;
+    color:var(--muted);
+    margin-top:6px;
+  }
+
+  .actions{ display:flex; flex-direction:column; gap:8px; align-items:flex-end; }
+  .btn{
+    padding:8px 12px;
+    border-radius:10px;
+    border:0;
+    font-weight:700;
+    cursor:pointer;
+    min-width:110px;
+  }
+  .btn-claim{
+    background:var(--green);
+    color:#fff;
+    box-shadow:0 6px 12px rgba(40,167,69,0.12);
+  }
+  .btn-disabled{
+    background:#ccc;
+    color:#fff;
+    cursor:default;
+    box-shadow:none;
+  }
+  .status {
+    font-size:13px;
+    text-align:right;
+    color:var(--muted);
+  }
+
+  /* admin panel */
+  .admin {
+    margin-top:18px;
+    display:none;
+    background:#fff;
+    padding:12px;
+    border-radius:10px;
+    box-shadow:0 8px 22px rgba(0,0,0,0.06);
+  }
+  .admin h4{ margin:0 0 8px 0; color:#333; font-size:14px; }
+  .admin .list{ display:flex; flex-wrap:wrap; gap:8px; max-height:220px; overflow:auto; padding-top:6px; }
+  .admin .reset-btn{
+    background:#ff7675; color:#fff; border:0; padding:6px 8px; border-radius:8px; cursor:pointer; font-weight:700;
+  }
+
+  /* small screens tweaks */
+  @media (max-width:420px){
+    .thumb{ width:56px; height:56px; flex:0 0 56px; }
+    .btn{ min-width:90px; padding:8px 10px; font-size:13px; }
+  }
+</style>
 </head>
 <body>
-
-  <!-- Floating hearts generator -->
-  <script>
-    function createHeart() {
-      const heart = document.createElement("div");
-      heart.className = "heart";
-      heart.textContent = "❤";
-      heart.style.left = Math.random() * 100 + "vw";
-      heart.style.bottom = "0px";
-      document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 4000);
-    }
-    setInterval(createHeart, 500);
-  </script>
-
-  <!-- Password Modal -->
-  <div id="passwordModal">
-    <div id="passwordBox">
-      <h3>Enter Secret Password 💖</h3>
-      <input id="passInput" type="password" placeholder="password" />
-      <br>
-      <button onclick="checkPassword()">Unlock</button>
-      <p id="error" style="color:red;"></p>
+<div class="wrap">
+  <header>
+    <div class="title">
+      💌 Cupones Románticos
+      <span id="titleHeart" class="title-heart">❤</span>
     </div>
-  </div>
+  </header>
 
-  <div class="container" id="mainContent" style="display:none;">
-    <h1>💖 Your Romantic Coupons 💖</h1>
-    <div id="couponList"></div>
+  <main>
+    <div id="grid" class="grid"></div>
 
-    <div class="cart">
-      <h2>🛒 Shopping Cart</h2>
-      <p id="cartText">No coupons claimed yet.</p>
-      <p><strong>Total Coupons Used:</strong> <span id="total">0</span></p>
+    <!-- admin panel (hidden until activated con 3 clicks rápidos en el corazón) -->
+    <div id="adminPanel" class="admin" aria-hidden="true">
+      <h4>Panel de restauración (elige 1 cupón para restablecer)</h4>
+      <div id="adminList" class="list"></div>
     </div>
-  </div>
+  </main>
+</div>
 
-  <script>
-    const PASSWORD = "love123"; // Change this
-    const coupons = [
-      { id: 1, name: "1 Hug", used: false },
-      { id: 2, name: "1 Kiss", used: false },
-      { id: 3, name: "Movie Night Together", used: false },
-      { id: 4, name: "Breakfast in Bed", used: false }
-    ];
+<script>
+/* ============================
+   Datos: 14 nombres confirmados
+   ============================ */
+const nombres = [
+  "Para una tarde de películas",
+  "Para una tarde de videojuegos",
+  "Para pintar cuadros",
+  "Para un día de skin care",
+  "Para un masaje con final feliz",
+  "Para consentirte un día",
+  "Válido por 20 abrazos",
+  "Para un regalo",
+  "Por un día hacer lo que quieras",
+  "Por un besito",
+  "Para ir al cine",
+  "Compras en Temu",
+  "Comprarte lo que quieras",
+  "Repetir cualquier cupón"
+];
 
-    function checkPassword() {
-      const input = document.getElementById("passInput").value;
-      if (input === PASSWORD) {
-        document.getElementById("passwordModal").style.display = "none";
-        document.getElementById("mainContent").style.display = "block";
-      } else {
-        document.getElementById("error").textContent = "Wrong password";
+/* Ruta de la mini-imagen que vamos a usar para todas las tarjetas.
+   (Se dejó la ruta al archivo que subiste.) */
+const MINI_IMG_URL = "/mnt/data/30182b92-c7d6-4720-a54d-db6222001c39.png";
+
+/* Estados: "available" | "confirm" | "redeemed" */
+/* Cargar estados desde localStorage o inicializar todos disponibles */
+let estados = {};
+const storageKey = "cupones_estados_v1";
+const saved = localStorage.getItem(storageKey);
+if(saved){
+  try{ estados = JSON.parse(saved); }catch(e){ estados = {}; }
+}
+nombres.forEach((n,i)=>{ if(!(i in estados)) estados[i] = "available"; });
+
+/* Guardar en storage */
+function guardar(){
+  localStorage.setItem(storageKey, JSON.stringify(estados));
+}
+
+/* Render: crea las tarjetas */
+const grid = document.getElementById("grid");
+function render(){
+  grid.innerHTML = "";
+  nombres.forEach((nombre, idx) => {
+    const state = estados[idx];
+    const card = document.createElement("article");
+    card.className = "card" + (state === "redeemed" ? " ago" : "");
+    card.setAttribute("data-index", idx);
+
+    card.innerHTML = `
+      <div class="thumb"><img src="${MINI_IMG_URL}" alt="cupón ${idx+1}"></div>
+      <div class="meta">
+        <div class="name">${nombre}</div>
+        <div class="stock" id="stock-${idx}">${state === "redeemed" ? "Cupón canjeado ❤️ (Agotado)" : "Stock: 1 disponible"}</div>
+      </div>
+      <div class="actions">
+        <div class="status" id="status-${idx}">${state === "confirm" ? "Confirmar" : ""}</div>
+        <button class="btn btn-claim" id="btn-${idx}" ${state === "redeemed" ? "disabled": ""}>
+          ${state === "available" ? "Canjear" : (state === "confirm" ? "Confirmar" : "")}
+        </button>
+      </div>
+    `;
+
+    grid.appendChild(card);
+
+    const btn = card.querySelector(`#btn-${idx}`);
+    const stockText = card.querySelector(`#stock-${idx}`);
+    const statusText = card.querySelector(`#status-${idx}`);
+
+    // states: available -> confirm -> redeemed
+    btn.addEventListener("click", () => {
+      const s = estados[idx];
+      if(s === "available"){
+        estados[idx] = "confirm";
+        btn.textContent = "Confirmar";
+        statusText.textContent = "Confirmar";
+        // keep button enabled to allow second click
+      } else if(s === "confirm"){
+        estados[idx] = "redeemed";
+        btn.disabled = true;
+        btn.classList.add("btn-disabled");
+        btn.style.display = "none";
+        stockText.textContent = "Cupón canjeado ❤️ (Agotado)";
+        card.classList.add("ago");
+        statusText.textContent = "";
       }
+      guardar();
+    });
+
+    // If redeemed on load, hide button
+    if(state === "redeemed"){
+      const b = card.querySelector(`#btn-${idx}`);
+      b.style.display = "none";
     }
+  });
 
-    // Load saved states
-    const saved = JSON.parse(localStorage.getItem("usedCoupons") || "{}");
-    coupons.forEach(c => { if (saved[c.id]) c.used = true; });
+  renderAdminList();
+}
 
-    function renderCoupons() {
-      const container = document.getElementById("couponList");
-      container.innerHTML = "";
-      coupons.forEach(c => {
-        const div = document.createElement("div");
-        div.className = "coupon";
-        div.innerHTML = `
-          <span><a href="coupon_${c.id}.html">${c.name}</a></span>
-          <button onclick="claim(${c.id})" ${c.used ? "disabled" : ""}>
-            ${c.used ? "Claimed" : "Claim"}
-          </button>
-        `;
-        container.appendChild(div);
-      });
-    }
+/* Admin hidden panel: restaurar individualmente */
+const adminPanel = document.getElementById("adminPanel");
+const adminList = document.getElementById("adminList");
+function renderAdminList(){
+  adminList.innerHTML = "";
+  nombres.forEach((n, i)=>{
+    const btn = document.createElement("button");
+    btn.className = "reset-btn";
+    btn.textContent = `${i+1}. ${n}`;
+    btn.addEventListener("click", ()=>{
+      if(confirm(`Restablecer "${n}" a Disponible?`)){
+        estados[i] = "available";
+        guardar();
+        render();
+      }
+    });
+    adminList.appendChild(btn);
+  });
+}
 
-    function claim(id) {
-      const coupon = coupons.find(c => c.id === id);
-      if (!coupon.used) coupon.used = true;
-      localStorage.setItem("usedCoupons", JSON.stringify(coupons.reduce((a,c)=>{a[c.id]=c.used;return a;},{})));
-      updateCart();
-      renderCoupons();
-    }
+/* Trigger para mostrar admin: 3 clicks rápidos en el corazón del título */
+const titleHeart = document.getElementById("titleHeart");
+let clickTimes = [];
+titleHeart.addEventListener("click", ()=>{
+  const now = Date.now();
+  clickTimes.push(now);
+  // keep only last 3
+  if(clickTimes.length > 3) clickTimes.shift();
+  if(clickTimes.length === 3 && (clickTimes[2] - clickTimes[0]) < 700){
+    // activar panel
+    adminPanel.style.display = adminPanel.style.display === "block" ? "none" : "block";
+    adminPanel.setAttribute("aria-hidden", adminPanel.style.display === "none" ? "true" : "false");
+  }
+});
 
-    function updateCart() {
-      const used = coupons.filter(c => c.used);
-      document.getElementById("total").textContent = used.length;
-      document.getElementById("cartText").innerHTML = used.length > 0 
-        ? used.map(u => "• " + u.name).join("<br>")
-        : "No coupons claimed yet.";
-    }
+/* Inicial render */
+render();
 
-    renderCoupons();
-    updateCart();
-  </script>
+/* Exponer función para resetear todo desde consola si quieres:
+   window.resetAllCupones = () => { nombres.forEach((_,i)=>estados[i]='available'); guardar(); render(); }
+*/
+</script>
 </body>
 </html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cute Romantic Coupons</title>
-  <style>
-    body {
-      font-family: "Arial", sans-serif;
-      background: #ffeef4;
-      margin: 0;
-      padding: 20px;
-      color: #444;
-    }
-    .container {
-      max-width: 600px;
-      margin: auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 20px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
-    h1 {
-      text-align: center;
-      color: #ff4f8b;
-    }
-    .coupon {
-      background: #ffdef0;
-      padding: 15px;
-      margin: 15px 0;
-      border-radius: 15px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    button {
-      background: #ff4f8b;
-      border: none;
-      padding: 10px 15px;
-      color: white;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-    .cart {
-      margin-top: 30px;
-      padding: 20px;
-      background: #ffd9e8;
-      border-radius: 20px;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>💖 Your Romantic Coupons 💖</h1>
 
-    <div id="couponList"></div>
-
-    <div class="cart">
-      <h2>🛒 Shopping Cart</h2>
-      <p id="cartText">No coupons claimed yet.</p>
-      <p><strong>Total Coupons Used:</strong> <span id="total">0</span></p>
-    </div>
-  </div>
-
-  <script>
-    const coupons = [
-      { id: 1, name: "1 Hug", used: false },
-      { id: 2, name: "1 Kiss", used: false },
-      { id: 3, name: "Movie Night Together", used: false },
-      { id: 4, name: "Breakfast in Bed", used: false }
-    ];
-
-    function renderCoupons() {
-      const container = document.getElementById("couponList");
-      container.innerHTML = "";
-      coupons.forEach(c => {
-        const div = document.createElement("div");
-        div.className = "coupon";
-        div.innerHTML = `
-          <span>${c.name}</span>
-          <button onclick="claim(${c.id})" ${c.used ? "disabled" : ""}>
-            ${c.used ? "Claimed" : "Claim"}
-          </button>
-        `;
-        container.appendChild(div);
-      });
-    }
-
-    function claim(id) {
-      const coupon = coupons.find(c => c.id === id);
-      if (!coupon.used) coupon.used = true;
-      updateCart();
-      renderCoupons();
-    }
-
-    function updateCart() {
-      const used = coupons.filter(c => c.used);
-      document.getElementById("total").textContent = used.length;
-      document.getElementById("cartText").textContent = used.length > 0 
-        ? used.map(u => "• " + u.name).join("<br>")
-        : "No coupons claimed yet.";
-    }
-
-    renderCoupons();
-    updateCart();
-  </script>
-</body>
-</html>
