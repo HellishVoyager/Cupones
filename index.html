@@ -1,305 +1,80 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Cupones Románticos</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cuponera del Amor</title>
 <style>
-  :root{
-    --bg:#fff7fa;
-    --card:#ffffff;
-    --accent:#ff4f8b;
-    --green:#28a745;
-    --muted:#bfbfc4;
-  }
-  body{
-    margin:0;
-    font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    background: linear-gradient(180deg,#fff4f8 0%, #ffeef4 100%);
-    color:#333;
-    -webkit-font-smoothing:antialiased;
-  }
-  .wrap{
-    max-width:980px;
-    margin:28px auto;
-    padding:18px;
-  }
-  header{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    margin-bottom:14px;
-  }
-  .title{
-    font-size:20px;
-    font-weight:700;
-    color:var(--accent);
-    display:flex;
-    align-items:center;
-    gap:8px;
-  }
-  .title-heart{
-    font-size:20px;
-    cursor:pointer;
-    user-select:none;
-  }
-
-  /* grid responsive */
-  .grid{
-    display:grid;
-    grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
-    gap:14px;
-  }
-
-  .card{
-    background:var(--card);
-    border-radius:12px;
-    padding:12px;
-    box-shadow:0 6px 18px rgba(0,0,0,0.06);
-    display:flex;
-    gap:12px;
-    align-items:center;
-    transition:transform .12s ease, opacity .2s ease;
-  }
-  .card.ago { opacity:.5; transform:scale(.995); }
-
-  .thumb{
-    width:66px;
-    height:66px;
-    flex:0 0 66px;
-    border-radius:8px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border:1px solid #111;
-    background:#fff;
-    overflow:hidden;
-  }
-  .thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
-
-  .meta{ flex:1; min-width:0; }
-  .name{
-    font-weight:600;
-    font-size:15px;
-    color:#222;
-    line-height:1.1;
-  }
-  .stock{
-    font-size:13px;
-    color:var(--muted);
-    margin-top:6px;
-  }
-
-  .actions{ display:flex; flex-direction:column; gap:8px; align-items:flex-end; }
-  .btn{
-    padding:8px 12px;
-    border-radius:10px;
-    border:0;
-    font-weight:700;
-    cursor:pointer;
-    min-width:110px;
-  }
-  .btn-claim{
-    background:var(--green);
-    color:#fff;
-    box-shadow:0 6px 12px rgba(40,167,69,0.12);
-  }
-  .btn-disabled{
-    background:#ccc;
-    color:#fff;
-    cursor:default;
-    box-shadow:none;
-  }
-  .status {
-    font-size:13px;
-    text-align:right;
-    color:var(--muted);
-  }
-
-  /* admin panel */
-  .admin {
-    margin-top:18px;
-    display:none;
-    background:#fff;
-    padding:12px;
-    border-radius:10px;
-    box-shadow:0 8px 22px rgba(0,0,0,0.06);
-  }
-  .admin h4{ margin:0 0 8px 0; color:#333; font-size:14px; }
-  .admin .list{ display:flex; flex-wrap:wrap; gap:8px; max-height:220px; overflow:auto; padding-top:6px; }
-  .admin .reset-btn{
-    background:#ff7675; color:#fff; border:0; padding:6px 8px; border-radius:8px; cursor:pointer; font-weight:700;
-  }
-
-  /* small screens tweaks */
-  @media (max-width:420px){
-    .thumb{ width:56px; height:56px; flex:0 0 56px; }
-    .btn{ min-width:90px; padding:8px 10px; font-size:13px; }
-  }
+ body{margin:0;font-family:'Arial',sans-serif;background:#ffe6f2;overflow-x:hidden}
+ #pantalla-inicial{position:fixed;inset:0;background:#ffb3d9;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;z-index:999}
+ #pantalla-inicial h1{font-size:3rem;color:#fff;text-shadow:2px 2px #ff4da6;margin-bottom:30px}
+ #ingresarBtn{padding:15px 30px;background:#ff4da6;color:#fff;border:none;font-size:1.5rem;border-radius:20px;cursor:pointer;box-shadow:0 4px 10px rgba(0,0,0,0.2)}
+ #ingresarBtn:hover{background:#e60073}
+ .heart-big{position:absolute;color:#fff;font-size:40px;animation:floatUp 6s infinite ease-in-out;opacity:.8}
+ @keyframes floatUp{0%{transform:translateY(100vh) scale(1);opacity:1}100%{transform:translateY(-20vh) scale(1.4);opacity:0}}
+ #contenido{display:none;padding:20px}
+ .cupon{background:#fff;border:2px solid #000;border-radius:10px;padding:15px;max-width:380px;margin:20px auto;box-shadow:0 4px 10px rgba(0,0,0,0.1)}
+ .titulo-cupon{font-size:1.2rem;margin:10px 0;font-weight:bold;text-align:center}
+ .btn{width:100%;padding:10px;border:none;background:#28a745;color:#fff;font-size:1.1rem;border-radius:8px;cursor:pointer}
+ .btn:hover{background:#1e7e34}
+ .agotado{background:#cc0033 !important;color:#fff !important;cursor:default}
+ .heart{position:fixed;bottom:-10px;color:#ff4da6;font-size:20px;animation:fly 5s linear infinite;opacity:.6}
+ @keyframes fly{0%{transform:translateY(0) translateX(0);opacity:1}100%{transform:translateY(-110vh) translateX(40px);opacity:0}}
+ .admin{margin-top:10px;text-align:center}
+ .admin button{font-size:.8rem;border:none;background:#666;color:#fff;padding:5px 10px;border-radius:6px;cursor:pointer}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <div class="title">
-      💌 Cupones Románticos
-      <span id="titleHeart" class="title-heart">❤</span>
-    </div>
-  </header>
-
-  <main>
-    <div id="grid" class="grid"></div>
-
-    <!-- admin panel (hidden until activated con 3 clicks rápidos en el corazón) -->
-    <div id="adminPanel" class="admin" aria-hidden="true">
-      <h4>Panel de restauración (elige 1 cupón para restablecer)</h4>
-      <div id="adminList" class="list"></div>
-    </div>
-  </main>
+<div id="pantalla-inicial">
+ <h1>Cuponera del Amor</h1>
+ <button id="ingresarBtn">Ingresar</button>
+ <div class="heart-big" style="left:10%">❤️</div>
+ <div class="heart-big" style="left:40%;animation-delay:1s">💗</div>
+ <div class="heart-big" style="left:70%;animation-delay:2s">💖</div>
 </div>
-
+<div id="contenido"></div>
 <script>
-/* ============================
-   Datos: 14 nombres confirmados
-   ============================ */
-const nombres = [
-  "Para una tarde de películas",
-  "Para una tarde de videojuegos",
-  "Para pintar cuadros",
-  "Para un día de skin care",
-  "Para un masaje con final feliz",
-  "Para consentirte un día",
-  "Válido por 20 abrazos",
-  "Para un regalo",
-  "Por un día hacer lo que quieras",
-  "Por un besito",
-  "Para ir al cine",
-  "Compras en Temu",
-  "Comprarte lo que quieras",
-  "Repetir cualquier cupón"
-];
-
-/* Ruta de la mini-imagen que vamos a usar para todas las tarjetas.
-   (Se dejó la ruta al archivo que subiste.) */
-const MINI_IMG_URL = "/mnt/data/30182b92-c7d6-4720-a54d-db6222001c39.png";
-
-/* Estados: "available" | "confirm" | "redeemed" */
-/* Cargar estados desde localStorage o inicializar todos disponibles */
-let estados = {};
-const storageKey = "cupones_estados_v1";
-const saved = localStorage.getItem(storageKey);
-if(saved){
-  try{ estados = JSON.parse(saved); }catch(e){ estados = {}; }
-}
-nombres.forEach((n,i)=>{ if(!(i in estados)) estados[i] = "available"; });
-
-/* Guardar en storage */
-function guardar(){
-  localStorage.setItem(storageKey, JSON.stringify(estados));
-}
-
-/* Render: crea las tarjetas */
-const grid = document.getElementById("grid");
-function render(){
-  grid.innerHTML = "";
-  nombres.forEach((nombre, idx) => {
-    const state = estados[idx];
-    const card = document.createElement("article");
-    card.className = "card" + (state === "redeemed" ? " ago" : "");
-    card.setAttribute("data-index", idx);
-
-    card.innerHTML = `
-      <div class="thumb"><img src="${MINI_IMG_URL}" alt="cupón ${idx+1}"></div>
-      <div class="meta">
-        <div class="name">${nombre}</div>
-        <div class="stock" id="stock-${idx}">${state === "redeemed" ? "Cupón canjeado ❤️ (Agotado)" : "Stock: 1 disponible"}</div>
-      </div>
-      <div class="actions">
-        <div class="status" id="status-${idx}">${state === "confirm" ? "Confirmar" : ""}</div>
-        <button class="btn btn-claim" id="btn-${idx}" ${state === "redeemed" ? "disabled": ""}>
-          ${state === "available" ? "Canjear" : (state === "confirm" ? "Confirmar" : "")}
-        </button>
-      </div>
-    `;
-
-    grid.appendChild(card);
-
-    const btn = card.querySelector(`#btn-${idx}`);
-    const stockText = card.querySelector(`#stock-${idx}`);
-    const statusText = card.querySelector(`#status-${idx}`);
-
-    // states: available -> confirm -> redeemed
-    btn.addEventListener("click", () => {
-      const s = estados[idx];
-      if(s === "available"){
-        estados[idx] = "confirm";
-        btn.textContent = "Confirmar";
-        statusText.textContent = "Confirmar";
-        // keep button enabled to allow second click
-      } else if(s === "confirm"){
-        estados[idx] = "redeemed";
-        btn.disabled = true;
-        btn.classList.add("btn-disabled");
-        btn.style.display = "none";
-        stockText.textContent = "Cupón canjeado ❤️ (Agotado)";
-        card.classList.add("ago");
-        statusText.textContent = "";
-      }
-      guardar();
-    });
-
-    // If redeemed on load, hide button
-    if(state === "redeemed"){
-      const b = card.querySelector(`#btn-${idx}`);
-      b.style.display = "none";
-    }
-  });
-
-  renderAdminList();
-}
-
-/* Admin hidden panel: restaurar individualmente */
-const adminPanel = document.getElementById("adminPanel");
-const adminList = document.getElementById("adminList");
-function renderAdminList(){
-  adminList.innerHTML = "";
-  nombres.forEach((n, i)=>{
-    const btn = document.createElement("button");
-    btn.className = "reset-btn";
-    btn.textContent = `${i+1}. ${n}`;
-    btn.addEventListener("click", ()=>{
-      if(confirm(`Restablecer "${n}" a Disponible?`)){
-        estados[i] = "available";
-        guardar();
-        render();
-      }
-    });
-    adminList.appendChild(btn);
-  });
-}
-
-/* Trigger para mostrar admin: 3 clicks rápidos en el corazón del título */
-const titleHeart = document.getElementById("titleHeart");
-let clickTimes = [];
-titleHeart.addEventListener("click", ()=>{
-  const now = Date.now();
-  clickTimes.push(now);
-  // keep only last 3
-  if(clickTimes.length > 3) clickTimes.shift();
-  if(clickTimes.length === 3 && (clickTimes[2] - clickTimes[0]) < 700){
-    // activar panel
-    adminPanel.style.display = adminPanel.style.display === "block" ? "none" : "block";
-    adminPanel.setAttribute("aria-hidden", adminPanel.style.display === "none" ? "true" : "false");
-  }
-});
-
-/* Inicial render */
-render();
-
-/* Exponer función para resetear todo desde consola si quieres:
-   window.resetAllCupones = () => { nombres.forEach((_,i)=>estados[i]='available'); guardar(); render(); }
-*/
+ const cupones=[
+ "Para una tarde de películas",
+ "Para una tarde de videojuegos",
+ "Para pintar cuadros",
+ "Para un día de skin care",
+ "Para un masaje con final feliz",
+ "Para consentirte un día",
+ "Válido por 20 abrazos",
+ "Para un regalo",
+ "Por un día hacer lo que quieras",
+ "Por un besito",
+ "Para ir al cine",
+ "Compras en Temu",
+ "Comprarte lo que quieras",
+ "Repetir cualquier cupón"
+ ];
+ document.getElementById("ingresarBtn").onclick=function(){pantalla-inicial.style.display="none";contenido.style.display="block";renderCupones();};
+ function renderCupones(){contenido.innerHTML="";
+ cupones.forEach((texto,i)=>{
+ const estado=localStorage.getItem("cupon_"+i)||"canjear";
+ const div=document.createElement("div");div.className="cupon";
+ const titulo=document.createElement("div");titulo.className="titulo-cupon";titulo.textContent=texto;
+ const btn=document.createElement("button");btn.className="btn";btn.id="btn"+i;
+ if(estado==="canjear"){btn.textContent="Canjear"}
+ if(estado==="confirmar"){btn.textContent="Confirmar"}
+ if(estado==="agotado"){btn.textContent="Agotado ❤️";btn.classList.add("agotado")}
+ btn.onclick=function(){manejar(i)};
+ const admin=document.createElement("div");admin.className="admin";
+ const reset=document.createElement("button");reset.textContent="Re-stock";
+ reset.onclick=function(){localStorage.setItem("cupon_"+i,"canjear");renderCupones();};
+ admin.appendChild(reset);
+ div.appendChild(titulo);
+ div.appendChild(btn);
+ div.appendChild(admin);
+ contenido.appendChild(div);
+ });}
+ function manejar(i){let estado=localStorage.getItem("cupon_"+i)||"canjear";
+ if(estado==="canjear"){localStorage.setItem("cupon_"+i,"confirmar")}
+ else if(estado==="confirmar"){localStorage.setItem("cupon_"+i,"agotado")}
+ renderCupones();}
+ function crearCorazon(){const heart=document.createElement("div");heart.className="heart";heart.textContent="❤️";heart.style.left=Math.random()*100+"vw";heart.style.fontSize=(15+Math.random()*20)+"px";document.body.appendChild(heart);setTimeout(()=>heart.remove(),5000);}setInterval(crearCorazon,500);
 </script>
 </body>
 </html>
-
