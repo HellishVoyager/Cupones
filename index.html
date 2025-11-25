@@ -199,3 +199,111 @@
   </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cute Romantic Coupons</title>
+  <style>
+    body {
+      font-family: "Arial", sans-serif;
+      background: #ffeef4;
+      margin: 0;
+      padding: 20px;
+      color: #444;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #ff4f8b;
+    }
+    .coupon {
+      background: #ffdef0;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    button {
+      background: #ff4f8b;
+      border: none;
+      padding: 10px 15px;
+      color: white;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .cart {
+      margin-top: 30px;
+      padding: 20px;
+      background: #ffd9e8;
+      border-radius: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>💖 Your Romantic Coupons 💖</h1>
+
+    <div id="couponList"></div>
+
+    <div class="cart">
+      <h2>🛒 Shopping Cart</h2>
+      <p id="cartText">No coupons claimed yet.</p>
+      <p><strong>Total Coupons Used:</strong> <span id="total">0</span></p>
+    </div>
+  </div>
+
+  <script>
+    const coupons = [
+      { id: 1, name: "1 Hug", used: false },
+      { id: 2, name: "1 Kiss", used: false },
+      { id: 3, name: "Movie Night Together", used: false },
+      { id: 4, name: "Breakfast in Bed", used: false }
+    ];
+
+    function renderCoupons() {
+      const container = document.getElementById("couponList");
+      container.innerHTML = "";
+      coupons.forEach(c => {
+        const div = document.createElement("div");
+        div.className = "coupon";
+        div.innerHTML = `
+          <span>${c.name}</span>
+          <button onclick="claim(${c.id})" ${c.used ? "disabled" : ""}>
+            ${c.used ? "Claimed" : "Claim"}
+          </button>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function claim(id) {
+      const coupon = coupons.find(c => c.id === id);
+      if (!coupon.used) coupon.used = true;
+      updateCart();
+      renderCoupons();
+    }
+
+    function updateCart() {
+      const used = coupons.filter(c => c.used);
+      document.getElementById("total").textContent = used.length;
+      document.getElementById("cartText").textContent = used.length > 0 
+        ? used.map(u => "• " + u.name).join("<br>")
+        : "No coupons claimed yet.";
+    }
+
+    renderCoupons();
+    updateCart();
+  </script>
+</body>
+</html>
