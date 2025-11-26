@@ -1,413 +1,260 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Cuponera del Amor 2.5</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Cuponera del Amor — v3</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Fraunces:opsz,wght@9..144,700&display=swap" rel="stylesheet">
 <style>
-/* ======================
-   ESTILOS GENERALES
-   ====================== */
-html, body {
-  margin: 0;
-  padding: 0;
-  font-family: "Poppins", sans-serif;
-  background: #fff0f6;
-  overflow-x: hidden;
-}
-
-.hidden { display:none; }
-
-/* ======================
-   PANTALLA DE CARGA
-   ====================== */
-#loader {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  background: linear-gradient(180deg,#ffd6e9,#ffb7d5);
-  z-index: 2000;
-  animation: fadeOut 1s ease forwards;
-  animation-delay: 2.8s;
-}
-
-@keyframes fadeOut {
-  to { opacity:0; visibility:hidden; }
-}
-
-.loader-heart {
-  font-size: 60px;
-  animation: beat 1s infinite;
-}
-
-@keyframes beat {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.25); }
-}
-
-/* ======================
-   LOGIN
-   ====================== */
-#loginScreen {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  background: linear-gradient(180deg,#ffe1ef,#ffc0d9,#ffa9ca);
-  z-index: 1500;
-  opacity: 0;
-  animation: fadeIn 1.2s ease forwards;
-  animation-delay: 3s;
-}
-
-@keyframes fadeIn { to { opacity:1; } }
-
-.login-box {
-  background: #ffffffcc;
-  padding: 20px 30px;
-  border-radius: 16px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-  backdrop-filter: blur(6px);
-}
-
-.login-box h2 {
-  margin: 0 0 10px;
-  color: #d8006b;
-}
-
-.login-input {
-  width: 100%;
-  padding: 10px;
-  margin-top: 10px;
-  border-radius: 10px;
-  border: 1px solid #ff96c0;
-}
-
-.login-btn {
-  margin-top: 14px;
-  width: 100%;
-  padding: 10px;
-  background: #ff4d88;
-  color: #fff;
-  border: none;
-  border-radius: 12px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.login-btn:hover { transform: scale(1.03); }
-
-/* mensajes flotantes suaves */
-.floating-text {
-  position: fixed;
-  color: #ff78a8;
-  font-weight: 700;
-  opacity: 0.25;
-  animation: floatMsg 10s linear infinite;
-  pointer-events: none;
-  z-index: 100;
-  font-size: 22px;
-}
-
-@keyframes floatMsg {
-  0% { transform: translateY(0) translateX(0); }
-  100% { transform: translateY(-120vh) translateX(30px); }
-}
-
-/* ======================
-   MENSAJE DE BIENVENIDA
-   ====================== */
-#welcomeScreen {
-  position: fixed;
-  inset: 0;
-  background: rgba(255,255,255,0.7);
-  backdrop-filter: blur(4px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  text-align: center;
-  z-index: 1400;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.6s;
-}
-
-#welcomeScreen.show {
-  opacity: 1;
-  pointer-events: all;
-}
-
-/* ======================
-   CUPOnerA PRINCIPAL
-   ====================== */
-#app {
-  display:none;
-  padding: 20px;
-  max-width: 1100px;
-  margin: auto;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px,1fr));
-  gap: 15px;
-  margin-top: 20px;
-}
-
-.card {
-  background: #fff;
-  padding: 15px;
-  border-radius: 16px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-  text-align: center;
-  transition: 0.25s;
-}
-
-.card:hover {
-  transform: translateY(-4px);
-}
-
-.btn-claim {
-  width:100%;
-  padding: 10px;
-  background: #28a745;
-  border: none;
-  color:#fff;
-  border-radius: 10px;
-  cursor:pointer;
-  font-weight:700;
-}
-
-/* ======================
-   CANJE ANIMADO
-   ====================== */
-#redeemPopup {
-  position: fixed;
-  inset: 0;
-  background: rgba(255,255,255,0.8);
-  backdrop-filter: blur(6px);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align:center;
-  z-index: 3000;
-  opacity: 0;
-  pointer-events:none;
-  transition: opacity 0.4s ease;
-  font-size:30px;
-  font-weight:800;
-  color:#d10054;
-}
-
-#redeemPopup.show {
-  opacity:1;
-  pointer-events: all;
-}
-
-/* ======================
-   MÚSICA
-   ====================== */
-#audioControls {
-  position: fixed;
-  bottom: 14px;
-  right: 14px;
-  z-index: 5000;
-}
-
-.music-btn {
-  background:#ff4d88;
-  border:none;
-  padding:12px 16px;
-  color:#fff;
-  border-radius:50px;
-  cursor:pointer;
-  font-weight:700;
-  box-shadow:0 4px 14px rgba(0,0,0,0.15);
-}
+:root{--bg1:#fff6fb;--accent:#ff4d6d;--accent2:#ffb3c6;--muted:#7b7b82;--card:#fff}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family:Inter,Arial,Helvetica,sans-serif;background:linear-gradient(180deg,var(--bg1),#fff0f6);color:#141214}
+/* START SCREEN */
+.start-screen{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(180deg,#ffd9e6,#ffbcd6);z-index:60}
+.hero{max-width:920px;background:linear-gradient(180deg,rgba(255,255,255,0.85),rgba(255,255,255,0.7));border-radius:18px;padding:28px;border:1px solid rgba(0,0,0,0.04);box-shadow:0 20px 60px rgba(15,15,20,0.06);display:flex;gap:20px;align-items:center;position:relative;overflow:hidden}
+.logo{width:72px;height:72px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-family:Fraunces,serif;font-size:30px}
+.hero-title{font-family:Fraunces,serif;font-size:28px;color:#3a1222;margin:0}
+.hero-sub{color:var(--muted);margin-top:6px}
+.enter-btn{margin-top:16px;padding:12px 20px;border-radius:12px;border:0;background:linear-gradient(90deg,var(--accent),#ff7a91);color:#fff;font-weight:800;cursor:pointer;box-shadow:0 10px 30px rgba(255,77,109,0.14)}
+/* floating decorative */
+.bg-float{position:absolute;inset:0;pointer-events:none}
+.float-item{position:absolute;opacity:.12;font-size:34px;animation:floatUp linear infinite}
+@keyframes floatUp{0%{transform:translateY(120%)}100%{transform:translateY(-40%);opacity:0}}
+/* LOADER */
+.loader{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;background:linear-gradient(180deg,#ffddeb,#ffc8dc);z-index:80}
+.loader-heart{font-size:48px;animation:beat 1s infinite}
+@keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
+.loader-text{margin-top:12px;font-weight:800;color:#6c1230}
+/* MAIN */
+main{display:none;padding:20px;max-width:1100px;margin:0 auto}
+.header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.site-title{font-family:Fraunces,serif;color:var(--accent);font-size:20px;font-weight:800}
+.site-heart{font-size:20px;cursor:pointer;color:var(--accent);user-select:none}
+.controls{display:flex;gap:8px}
+.small-btn{padding:8px 10px;border-radius:10px;border:0;background:var(--card);box-shadow:0 8px 18px rgba(13,13,16,0.04);cursor:pointer;font-weight:700}
+.grid{margin-top:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.card{background:var(--card);border-radius:14px;padding:12px;border:1px solid rgba(0,0,0,0.06);box-shadow:0 8px 20px rgba(13,13,16,0.04);display:flex;flex-direction:column;align-items:center;position:relative;transition:transform .12s}
+.card:hover{transform:translateY(-6px)}
+.cup-emoji{font-size:34px;margin-bottom:8px}
+.cup-title{font-weight:800;color:#222;text-align:center;font-size:15px;margin:6px 0}
+.cup-sub{font-size:13px;color:var(--muted);margin-bottom:8px}
+.btn-claim{width:100%;padding:10px 12px;border-radius:10px;border:0;background:linear-gradient(90deg,#5ec46b,#28a745);color:#fff;font-weight:800;cursor:pointer}
+.agotado{opacity:.55}
+/* ADMIN */
+.admin-panel{display:none;background:#fff;padding:10px;border-radius:10px;border:1px solid rgba(0,0,0,0.06);margin-top:16px;box-shadow:0 10px 26px rgba(0,0,0,0.06)}
+.admin-list{display:flex;flex-wrap:wrap;gap:8px;padding:6px}
+.admin-btn{padding:6px 10px;background:#ff7675;border:0;color:#fff;border-radius:8px;cursor:pointer;font-weight:700}
+/* REDEEM OVERLAY */
+.redeem-overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.2);z-index:120;opacity:0;pointer-events:none;transition:opacity .18s}
+.redeem-overlay.show{opacity:1;pointer-events:auto}
+.redeem-card{background:#fff;padding:22px;border-radius:18px;text-align:center;box-shadow:0 26px 72px rgba(13,13,16,0.12)}
+.redeem-card .big-heart{font-size:72px;color:var(--accent)}
+.redeem-card .big-text{font-family:Fraunces,serif;font-size:26px;margin-top:10px}
+/* CONFETTI CANVAS */
+#confetti{position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:110}
+/* AUDIO CONTROL */
+.audio-toggle{padding:8px 10px;border-radius:10px;border:0;background:linear-gradient(90deg,#fff8f8,#ffeef2);cursor:pointer;font-weight:700}
+/* responsive tweaks */
+@media (max-width:480px){.cup-title{font-size:14px}.btn-claim{font-size:13px}.site-title{font-size:18px}}
 </style>
 </head>
 <body>
 
-<!-- ===================== -->
-<!--  PANTALLA DE CARGA    -->
-<!-- ===================== -->
-<div id="loader">
-  <div class="loader-heart">❤</div>
-  <p style="color:#fff;font-weight:700;margin-top:10px">Cargando amor...</p>
-</div>
+<!-- START SCREEN -->
+<section id="start" class="start-screen" aria-hidden="false">
+  <div class="hero">
+    <div class="bg-float" aria-hidden="true">
+      <div class="float-item" style="left:6vw;top:60%;animation-duration:14s">❤</div>
+      <div class="float-item" style="left:28vw;top:72%;animation-duration:12s">💗</div>
+      <div class="float-item" style="left:48vw;top:80%;animation-duration:16s">💖</div>
+      <div class="float-item" style="left:72vw;top:88%;animation-duration:18s">🎟️</div>
+      <div class="float-item" style="left:86vw;top:70%;animation-duration:13s">🎁</div>
+    </div>
 
-<!-- ===================== -->
-<!--  LOGIN                -->
-<!-- ===================== -->
-<div id="loginScreen">
-  <div class="login-box">
-    <h2>Credenciales de la muñequita linda</h2>
-    <input id="userInput" class="login-input" placeholder="Usuario" />
-    <input id="passInput" class="login-input" placeholder="Contraseña" />
-    <button class="login-btn" onclick="attemptLogin()">Entrar</button>
+    <div style="display:flex;gap:18px;align-items:center;z-index:2">
+      <div class="logo">❤</div>
+      <div>
+        <div class="hero-title">Bienvenida a la Cuponera del Amor</div>
+        <div class="hero-sub">Pequeños gestos para ustedes dos, hechos con cariño</div>
+        <button id="enterBtn" class="enter-btn">Ingresar a la cuponera</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOADER (Cargando cupones) hidden by default -->
+<section id="loader" class="loader" style="display:none">
+  <div class="loader-heart">❤</div>
+  <div class="loader-text">Cargando cupones...</div>
+</section>
+
+<!-- MAIN APP -->
+<main id="app" aria-hidden="true">
+  <header class="header">
+    <div style="display:flex;align-items:center;gap:12px"><div class="site-title">Cuponera del Amor</div><div id="titleHeart" class="site-heart" title="presiona 3 veces para opciones">❤</div></div>
+    <div class="controls">
+      <button id="resetView" class="small-btn">Ver estado</button>
+      <button id="helpBtn" class="small-btn">Ayuda</button>
+      <button id="audioToggle" class="audio-toggle">♪</button>
+    </div>
+  </header>
+
+  <section id="grid" class="grid"></section>
+
+  <div id="adminPanel" class="admin-panel" aria-hidden="true">
+    <div style="font-weight:800;color:#222;margin-bottom:8px">Panel secreto — Re-stock</div>
+    <div class="admin-list" id="adminList"></div>
+  </div>
+</main>
+
+<!-- LOGIN MODAL (appears when pressing enter if not logged) -->
+<div id="loginModal" style="display:none;position:fixed;inset:0;align-items:center;justify-content:center;background:rgba(0,0,0,0.25);z-index:140">
+  <div style="background:#fff;padding:18px;border-radius:12px;max-width:360px;margin:auto;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.12)">
+    <div style="font-weight:800;font-size:18px;color:var(--accent)">Credenciales de la muñequita linda</div>
+    <div style="margin-top:12px;text-align:left">
+      <div style="font-weight:700;margin-bottom:6px">Usuario</div>
+      <input id="loginUser" style="width:100%;padding:10px;border-radius:8px;border:1px solid #eee" placeholder="Nombre" />
+      <div style="font-weight:700;margin:8px 0 6px">Clave</div>
+      <input id="loginPass" style="width:100%;padding:10px;border-radius:8px;border:1px solid #eee" placeholder="MM/DD/YYYY" />
+    </div>
+    <div style="display:flex;gap:10px;justify-content:center;margin-top:14px">
+      <button id="loginCancel" class="small-btn">Cancelar</button>
+      <button id="loginSubmit" class="enter-btn">Ingresar</button>
+    </div>
+    <div style="margin-top:10px;color:var(--muted);font-size:13px">Usuario: <strong>Sofia</strong> • Clave: <strong>12/15/2025</strong></div>
   </div>
 </div>
 
-<!-- Mensajes flotantes -->
-<div class="floating-text" style="left:10vw; animation-delay:0s">Te Amo ❤</div>
-<div class="floating-text" style="left:50vw; animation-delay:4s">Eres mi vida 💗</div>
-<div class="floating-text" style="left:75vw; animation-delay:2s">Mi princesa 💖</div>
+<!-- REDEEM OVERLAY -->
+<div id="redeemOverlay" class="redeem-overlay"><div class="redeem-card"><div class="big-heart">❤</div><div class="big-text">Canjeado con éxito!</div></div></div>
 
-<!-- ===================== -->
-<!--  PANTALLA BIENVENIDA -->
-<!-- ===================== -->
-<div id="welcomeScreen">
-  <h1 style="font-size:38px;color:#d10054">Bienvenida corazón 💖</h1>
-  <p style="font-size:20px;margin-top:6px">Ya puedes usar tus cupones</p>
-</div>
+<!-- CONFETTI CANVAS -->
+<canvas id="confetti"></canvas>
 
-<!-- ===================== -->
-<!--  CUPOnerA            -->
-<!-- ===================== -->
-<main id="app">
-  <h1 style="color:#ff4d88;text-align:center">Cuponera del Amor 2.5</h1>
-  <section id="grid" class="grid"></section>
-</main>
-
-<!-- ===================== -->
-<!-- POPUP CANJE          -->
-<!-- ===================== -->
-<div id="redeemPopup">¡Canjeado con éxito! ❤</div>
-
-<!-- ===================== -->
-<!-- CONTROL DE MÚSICA    -->
-<!-- ===================== -->
-<div id="audioControls" class="hidden">
-  <button class="music-btn" onclick="toggleMusic()">⏸ Música</button>
-</div>
-
-<audio id="bgMusic" loop preload="auto"></audio>
+<!-- AUDIO -->
+<audio id="bgAudio" loop preload="none">
+  <source src="https://drive.google.com/uc?export=download&id=1Dx5JaKuDL3OmWD3sIMhf0SGot2lMjbXB" type="audio/mpeg">
+</audio>
 
 <script>
-/* ===================
-   CONFIGURACIÓN
-   =================== */
-const MUSIC_URL = "https://docs.google.com/uc?export=download&id=1Dx5JaKuDL3OmWD3sIMhf0SGot2lMjbXB";
-const WEBHOOK = "https://discord.com/api/webhooks/1443241851032309854/c-DNoO_Dr8WEDAKtxfrCIt4GALrC_SZDZLqNXgQvrYyFSzC6z98e3wxsYkiRkoXUjlmk";
+/* =================== CONFIG =================== */
+const WEBHOOK_URL = "https://discord.com/api/webhooks/1443241851032309854/c-DNoO_Dr8WEDAKtxfrCIt4GALrC_SZDZLqNXgQvrYyFSzC6z98e3wxsYkiRkoXUjlmk";
+const LS_KEY = 'cuponera_final_v3';
+const LOGIN_USER = 'Sofia';
+const LOGIN_PASS = '12/15/2025';
 
-const NOMBRES = [
-  "Tarde de películas juntos",
-  "Videojuegos para dos",
-  "Pintar cuadros",
-  "Día completo de skin care",
-  "Masaje con final feliz",
-  "Día para consentirte",
-  "20 abrazos extra",
-  "Un regalo sorpresa",
-  "Día donde tú mandas",
-  "Un besito especial",
-  "Ir al cine",
-  "Compras en Temu",
-  "Eliges un regalo",
-  "Repetir cualquier cupón"
+/* =================== COUPONS (with emojis requested) =================== */
+const COUPONS = [
+  {emoji:'💋', title:'Un beso donde tú quieras', desc:''},
+  {emoji:'💆', title:'Masajito relajante', desc:''},
+  {emoji:'🍽️', title:'Cena hecha por mí', desc:''},
+  {emoji:'🎬', title:'Película que tú elijas', desc:''},
+  {emoji:'🤗', title:'Un abrazo largo', desc:''},
+  {emoji:'😘', title:'Un piquito sorpresa', desc:''},
+  {emoji:'🌙', title:'Noche romántica contigo', desc:''},
+  {emoji:'🌹', title:'Detalles lindos para ti', desc:''},
+  {emoji:'🎮', title:'Tarde de videojuegos', desc:''},
+  {emoji:'🎨', title:'Para pintar cuadros', desc:''},
+  {emoji:'🧖‍♀️', title:'Día de skin care', desc:''},
+  {emoji:'🍰', title:'Consentirte con un postre', desc:''},
+  {emoji:'🎁', title:'Un regalito sorpresa', desc:''},
+  {emoji:'🔁', title:'Repetir cualquier cupón', desc:''}
 ];
 
-let estados = JSON.parse(localStorage.getItem("cuponera_v2_5") || "{}");
-NOMBRES.forEach((_,i)=>{ if(!estados[i]) estados[i]="available" });
+/* =================== STATE =================== */
+let state = {}; const saved = localStorage.getItem(LS_KEY);
+if(saved){ try{ const parsed = JSON.parse(saved); state = parsed.state || {}; }catch(e){ state = {}; }}
+COUPONS.forEach((_,i)=>{ if(!(i in state)) state[i] = 'available'; });
 
-/* ===================
-   LOGIN
-   =================== */
-function attemptLogin(){
-  const u = document.getElementById("userInput").value.trim();
-  const p = document.getElementById("passInput").value.trim();
+/* DOM refs */
+const start = document.getElementById('start');
+const enterBtn = document.getElementById('enterBtn');
+const loader = document.getElementById('loader');
+const app = document.getElementById('app');
+const grid = document.getElementById('grid');
+const loginModal = document.getElementById('loginModal');
+const loginUser = document.getElementById('loginUser');
+const loginPass = document.getElementById('loginPass');
+const loginSubmit = document.getElementById('loginSubmit');
+const loginCancel = document.getElementById('loginCancel');
+const redeemOverlay = document.getElementById('redeemOverlay');
+const adminPanel = document.getElementById('adminPanel');
+const adminList = document.getElementById('adminList');
+const titleHeart = document.getElementById('titleHeart');
+const bgAudio = document.getElementById('bgAudio');
+const audioToggle = document.getElementById('audioToggle');
 
-  if(u.toLowerCase()==="sofia" && p==="12/15/2025"){
-    document.getElementById("loginScreen").style.display="none";
-    showWelcome();
-    startMusic();
+/* AUDIO: set low volume */
+bgAudio.volume = 0.18;
+
+/* ENTER behavior: show login if not logged; else go to loader -> main */
+enterBtn.addEventListener('click', ()=>{
+  const logged = localStorage.getItem('cuponera_logged_v3');
+  if(logged==='true'){
+    // show loader then open
+    showLoaderThenOpen();
   } else {
-    alert("Credenciales incorrectas mi amorcito ❤️");
+    loginModal.style.display = 'flex';
   }
+});
+
+/* login actions */
+loginCancel.addEventListener('click', ()=>{ loginModal.style.display='none'; });
+loginSubmit.addEventListener('click', attemptLogin);
+loginPass.addEventListener('keydown', (e)=>{ if(e.key==='Enter') attemptLogin(); });
+function attemptLogin(){ const u = loginUser.value.trim(); const p = loginPass.value.trim(); if(u.toLowerCase()===LOGIN_USER.toLowerCase() && p===LOGIN_PASS){ localStorage.setItem('cuponera_logged_v3','true'); loginModal.style.display='none'; showLoaderThenOpen(); } else { alert('Credenciales incorrectas, mi amor ❤️'); } }
+
+/* loader then open main */
+function showLoaderThenOpen(){ loader.style.display='flex'; // play audio once user interacted
+ bgAudio.play().catch(()=>{});
+ setTimeout(()=>{ loader.style.display='none'; openMain(); }, 1400); }
+
+/* open main */
+function openMain(){ start.style.display='none'; app.style.display='block'; renderGrid(); }
+
+/* render grid */
+function renderGrid(){ grid.innerHTML=''; COUPONS.forEach((c,i)=>{ const s = state[i]; const card = document.createElement('article'); card.className = 'card' + (s==='redeemed'?' agotado':''); const emoji = document.createElement('div'); emoji.className='cup-emoji'; emoji.textContent = c.emoji; const title = document.createElement('div'); title.className='cup-title'; title.textContent = c.title; const sub = document.createElement('div'); sub.className='cup-sub'; sub.textContent = s==='available' ? 'Stock: 1 disponible' : (s==='redeemed'?'Canjeado':'Confirmar'); const btn = document.createElement('button'); btn.className='btn-claim'; btn.textContent = s==='available' ? 'Canjear' : (s==='confirm' ? 'Confirmar' : ''); if(s==='redeemed') btn.style.display='none'; btn.addEventListener('click', ()=>{ if(state[i]==='available'){ state[i] = 'confirm'; saveState(); } else if(state[i]==='confirm'){ state[i] = 'redeemed'; saveState(); onRedeem(i); } }); card.appendChild(emoji); card.appendChild(title); card.appendChild(sub); card.appendChild(btn); grid.appendChild(card); }); renderAdminList(); }
+
+/* save */
+function saveState(){ localStorage.setItem(LS_KEY, JSON.stringify({state})); renderGrid(); }
+
+/* on redeem: show effects + webhook */
+function onRedeem(i){ showRedeemOverlay(); launchConfetti(); playPop(); sendDiscord(i); setTimeout(()=>{ hideRedeemOverlay(); },2000); }
+function showRedeemOverlay(){ redeemOverlay.classList.add('show'); }
+function hideRedeemOverlay(){ redeemOverlay.classList.remove('show'); }
+
+/* confetti */
+const confettiCanvas = document.getElementById('confetti'); const confettiCtx = confettiCanvas.getContext('2d'); function resizeCanvas(){ confettiCanvas.width = window.innerWidth; confettiCanvas.height = window.innerHeight; } window.addEventListener('resize', resizeCanvas); resizeCanvas(); let confettiPieces = []; function launchConfetti(){ confettiPieces = []; const count = 80; for(let i=0;i<count;i++){ confettiPieces.push({x:Math.random()*confettiCanvas.width, y:-Math.random()*confettiCanvas.height, r:4+Math.random()*8, vx:(Math.random()-0.5)*6, vy:2+Math.random()*6, color:['#ff6b86','#ffd1df','#ffd27a','#ff9fbf'][Math.floor(Math.random()*4)], ttl:200}); } animate(); function animate(){ confettiCtx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height); confettiPieces.forEach((p)=>{ p.x += p.vx; p.y += p.vy; p.ttl--; confettiCtx.fillStyle = p.color; confettiCtx.beginPath(); confettiCtx.ellipse(p.x,p.y,p.r,p.r*0.6,0,0,Math.PI*2); confettiCtx.fill(); }); confettiPieces = confettiPieces.filter(p=>p.ttl>0 && p.y<confettiCanvas.height+100); if(confettiPieces.length>0) requestAnimationFrame(animate); } }
+
+/* pop sound */
+function playPop(){ try{ const ctx = new (window.AudioContext||window.webkitAudioContext)(); const o = ctx.createOscillator(); const g = ctx.createGain(); o.type='sine'; o.frequency.value=880; g.gain.value=0.0001; o.connect(g); g.connect(ctx.destination); o.start(); g.gain.exponentialRampToValueAtTime(0.12, ctx.currentTime + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.28); o.stop(ctx.currentTime + 0.3);}catch(e){}
 }
 
-function showWelcome(){
-  const w = document.getElementById("welcomeScreen");
-  w.classList.add("show");
-  setTimeout(()=>{
-    w.classList.remove("show");
-    document.getElementById("app").style.display="block";
-    document.getElementById("audioControls").classList.remove("hidden");
-    renderGrid();
-  },3100);
-}
+/* device detect for discord message */
+function detectDevice(){ const ua = navigator.userAgent || navigator.vendor || window.opera; if(/android/i.test(ua)) return 'Móvil (Android)'; if(/iPhone|iPad|iPod/i.test(ua)) return 'Móvil (iOS)'; return 'Escritorio'; }
 
-/* ===================
-   MÚSICA
-   =================== */
-const bgMusic = document.getElementById("bgMusic");
-bgMusic.src = MUSIC_URL;
+/* send discord */
+function sendDiscord(index){ const coupon = COUPONS[index]; const now = new Date(); const fecha = now.toLocaleDateString(); const hora = now.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}); const dispositivo = detectDevice(); const content = `💖 *Cupón canjeado* 💖\n**Cupón:** ${coupon.title}\n**Fecha:** ${fecha}\n**Hora:** ${hora}\n**Dispositivo:** ${dispositivo}\n**Estado:** CANJEADO ✔️`; fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content})}).catch(e=>console.warn('webhook',e)); }
 
-function startMusic(){ bgMusic.play().catch(()=>{}); }
-function toggleMusic(){
-  if(bgMusic.paused){ bgMusic.play(); }
-  else { bgMusic.pause(); }
-}
+/* admin panel render */
+function renderAdminList(){ adminList.innerHTML=''; COUPONS.forEach((c,i)=>{ const b = document.createElement('button'); b.className='admin-btn'; b.textContent = `${i+1}. ${c.title}`; b.addEventListener('click', ()=>{ if(confirm(`Restablecer "${c.title}" a Disponible?`)){ state[i] = 'available'; saveState(); alert('Restablecido.'); } }); adminList.appendChild(b); }); }
 
-/* ===================
-   RENDER DE CUPOnerA
-   =================== */
-function renderGrid(){
-  const grid = document.getElementById("grid");
-  grid.innerHTML = "";
+/* secret panel: triple click on heart */
+let clicks=[]; titleHeart.addEventListener('click', ()=>{ const now = Date.now(); clicks.push(now); if(clicks.length>3) clicks.shift(); if(clicks.length===3 && (clicks[2]-clicks[0])<700){ if(adminPanel.style.display==='block'){ adminPanel.style.display='none'; adminPanel.setAttribute('aria-hidden','true'); } else { adminPanel.style.display='block'; adminPanel.setAttribute('aria-hidden','false'); adminPanel.scrollIntoView({behavior:'smooth',block:'center'}); } }});
 
-  NOMBRES.forEach((titulo, i)=>{
-    const state = estados[i];
+/* audio toggle */
+audioToggle.addEventListener('click', ()=>{ if(bgAudio.paused){ bgAudio.play().catch(()=>{}); audioToggle.textContent='▮▮'; } else { bgAudio.pause(); audioToggle.textContent='♪'; }});
 
-    let html = `<div class='card'>
-      <h3>${titulo}</h3>
-      <p>${state==="redeemed" ? "Canjeado" : "Disponible"}</p>`;
+/* visible helpers */
+document.getElementById('resetView').addEventListener('click', ()=>{ let avail=0; Object.values(state).forEach(s=>{ if(s==='available') avail++; }); alert(avail + ' cupones disponibles'); });
+document.getElementById('helpBtn').addEventListener('click', ()=>{ alert('Toca un cupón para iniciar canje; confirma para canjear. Toca 3 veces el corazón superior para abrir el panel secreto.'); });
 
-    if(state !== "redeemed")
-      html += `<button class='btn-claim' onclick='redeem(${i})'>Canjear</button>`;
+/* init */
+(function init(){ renderGrid(); // if user previously logged, show start but Enter will skip login because logic checks storage
+})();
 
-    html += `</div>`;
-    grid.innerHTML += html;
-  });
-}
-
-/* ===================
-   CANJE + DISCORD
-   =================== */
-function redeem(i){
-  estados[i] = "redeemed";
-  localStorage.setItem("cuponera_v2_5", JSON.stringify(estados));
-  renderGrid();
-  showRedeemPopup();
-  notifyDiscord(i);
-}
-
-function showRedeemPopup(){
-  const pop = document.getElementById("redeemPopup");
-  pop.classList.add("show");
-  setTimeout(()=> pop.classList.remove("show"), 2200);
-}
-
-function notifyDiscord(i){
-  const msg = {
-    content: `💌 **Cupón canjeado**\n❤ *${NOMBRES[i]}*\n⏰ ${new Date().toLocaleString()}`
-  };
-
-  fetch(WEBHOOK, {
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body: JSON.stringify(msg)
-  });
-}
+/* expose reset */
+window.resetAllCupones = function(){ COUPONS.forEach((_,i)=> state[i] = 'available'); saveState(); };
 
 </script>
 </body>
