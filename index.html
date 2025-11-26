@@ -1,307 +1,275 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Cuponera del Amor</title>
+<title>Cuponera del Amor — Premium</title>
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Fraunces:opsz,wght@9..144,700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg1: #fff0f6;
-    --pink: #ff4d6d;
-    --soft-pink: #ffd7ea;
-    --card: #fff;
-    --green: #28a745;
-    --red: #cc0033;
-    --muted: #7b7b82;
+    --bg1:#fff8fb; --bg2:#fff0f6; --accent:#ff5a7a; --accent-2:#ffb3c6; --card:#ffffff;
+    --muted:#7b7b82; --glass: rgba(255,255,255,0.65);
   }
-  html,body{height:100%;margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#fffafc 0%,#ffe6ec 100%);color:#222}
-  /* ---------- START SCREEN ---------- */
-  .start-screen{
-    position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(180deg,#ffd9e6 0%,#ffbcd6 100%);z-index:40;transition:opacity .6s ease;
-  }
-  .start-title{
-    font-size:clamp(24px,5.2vw,48px);
-    color:white;text-align:center;font-weight:800;letter-spacing:0.6px;
-    text-shadow:0 6px 18px rgba(0,0,0,0.12);
-    display:flex;align-items:center;gap:12px;
-  }
-  .start-heart{font-size: clamp(34px,6.5vw,64px); transform:translateY(0)}
-  .enter-btn{
-    margin-top:22px;background:var(--pink);color:#fff;border:0;padding:14px 28px;border-radius:14px;font-size:18px;cursor:pointer;box-shadow:0 8px 18px rgba(255,77,109,0.2)
-  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;font-family:Inter, Arial, Helvetica, sans-serif;background:linear-gradient(180deg,var(--bg1) 0%,var(--bg2) 100%);color:#141214;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  /* HERO / START */
+  .start-screen{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px;background:linear-gradient(180deg, rgba(255,90,122,0.08), rgba(255,179,198,0.06));z-index:60}
+  .hero-card{width:100%;max-width:920px;background:linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.7));border-radius:18px;padding:28px;border:1px solid rgba(0,0,0,0.04);box-shadow:0 18px 50px rgba(15,15,20,0.06);display:flex;gap:20px;align-items:center}
+  .hero-left{flex:1}
+  .brand{display:flex;align-items:center;gap:12px}
+  .logo{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-family:Fraunces,serif;font-size:28px;box-shadow:0 8px 26px rgba(255,90,122,0.18)}
+  .title{font-family:Fraunces, serif;font-size:28px;margin:6px 0 0;color:#3a1222}
+  .subtitle{color:var(--muted);margin-top:6px}
+  .enter-btn{margin-top:16px;padding:12px 20px;border-radius:12px;border:0;background:linear-gradient(90deg,var(--accent),#ff7a91);color:#fff;font-weight:700;cursor:pointer;box-shadow:0 10px 30px rgba(255,90,122,0.14)}
   .enter-btn:active{transform:translateY(1px)}
-  /* big floating hearts */
-  .big-heart{position:absolute;color:#fff;opacity:.9;filter:drop-shadow(0 6px 14px rgba(0,0,0,0.12));animation:bigFloat 6s linear infinite}
-  @keyframes bigFloat{0%{transform:translateY(120vh) scale(1)}100%{transform:translateY(-30vh) scale(1.4);opacity:0}}
-  /* ---------- MAIN CONTENT ---------- */
-  .main{display:none;padding:18px 12px 80px;max-width:1100px;margin:0 auto}
-  .header{display:flex;align-items:center;gap:12px;justify-content:center;margin-top:6px}
-  .site-title{font-size:22px;color:var(--pink);font-weight:800;display:flex;gap:8px;align-items:center}
-  .site-heart{font-size:22px;cursor:pointer;user-select:none}
-  .floating-heart{position:fixed;bottom:-20px;color:var(--pink);font-size:18px;opacity:.7;animation:float 5s linear infinite;pointer-events:none}
-  @keyframes float{0%{transform:translateY(0) translateX(0);opacity:1}100%{transform:translateY(-120vh) translateX(30px);opacity:0}}
-  /* grid */
-  .grid{margin-top:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
-  .card{
-    background:var(--card);border-radius:14px;padding:12px;border:1px solid rgba(0,0,0,0.06);
-    box-shadow:0 8px 20px rgba(13,13,16,0.04);display:flex;flex-direction:column;align-items:center;
-    transition:transform .12s ease,opacity .18s ease;
-  }
-  .card.agotado{opacity:.55;transform:translateY(2px)}
-  .cup-title{font-weight:700;color:#222;text-align:center;font-size:15px;margin:8px 0}
-  .cup-sub{font-size:13px;color:var(--muted);margin-bottom:8px}
-  .btn-claim{width:100%;padding:10px 12px;border-radius:10px;border:0;background:var(--green);color:#fff;font-weight:800;cursor:pointer;font-size:14px}
-  .btn-claim.confirm{background:#e6b800} /* yellowish for confirm stage */
-  .status-msg{margin-top:8px;font-weight:800}
-  .status-agotado{color:var(--red);font-weight:900;font-size:14px;letter-spacing:.6px}
-  .thanks{color:#d10034;font-weight:800;text-align:center;margin-top:8px}
-  /* admin panel (hidden until triggered) */
-  .admin-panel{display:none;background:#fff;padding:10px;border-radius:10px;border:1px solid rgba(0,0,0,0.06);margin-top:16px;box-shadow:0 10px 26px rgba(0,0,0,0.06)}
-  .admin-list{display:flex;flex-wrap:wrap;gap:8px;padding:6px}
-  .admin-btn{padding:6px 10px;background:#ff7675;border:0;color:#fff;border-radius:8px;cursor:pointer;font-weight:700}
-  /* responsive tweaks */
-  @media (max-width:480px){
-    .cup-title{font-size:14px}
-    .btn-claim{font-size:13px}
-    .site-title{font-size:18px}
-  }
+  .hero-right{width:260px;display:flex;flex-direction:column;align-items:center;gap:12px}
+  .heart-big{font-size:44px}
+  /* MAIN */
+  main{display:none;padding:20px;max-width:1100px;margin:0 auto}
+  header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .site-left{display:flex;align-items:center;gap:12px}
+  .site-title{font-family:Fraunces, serif;color:#3a1222;font-size:20px;font-weight:700}
+  .site-heart{font-size:20px;color:var(--accent);cursor:pointer;user-select:none}
+  .controls{display:flex;gap:8px;align-items:center}
+  .small-btn{padding:8px 10px;border-radius:10px;border:0;background:var(--card);box-shadow:0 8px 18px rgba(13,13,16,0.04);cursor:pointer;font-weight:700}
+  /* GRID */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:18px}
+  .card{background:var(--card);padding:14px;border-radius:14px;border:1px solid rgba(0,0,0,0.04);box-shadow:0 10px 26px rgba(13,13,16,0.04);display:flex;flex-direction:column;align-items:center;position:relative;overflow:hidden}
+  .cup-emoji{font-size:30px;margin-bottom:6px}
+  .cup-title{font-weight:800;text-align:center;color:#2b1b23;margin-bottom:6px}
+  .cup-desc{font-size:13px;color:var(--muted);margin-bottom:12px;text-align:center}
+  .btn-claim{width:100%;padding:10px;border-radius:10px;border:0;background:linear-gradient(90deg,#5ec46b,#28a745);color:#fff;font-weight:800;cursor:pointer}
+  .btn-confirm{background:linear-gradient(90deg,#ffcf5e,#e6b800);}
+  .card.agotado{opacity:.6;transform:scale(.995)}
+  .status{position:absolute;left:10px;top:10px;padding:6px 8px;border-radius:10px;background:rgba(255,90,122,0.06);font-weight:700;color:#d43a5a;font-size:12px}
+  /* modal */
+  .modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(10,10,10,0.25);z-index:80;opacity:0;pointer-events:none;transition:opacity .18s linear}
+  .modal.show{opacity:1;pointer-events:auto}
+  .modal-card{width:100%;max-width:560px;background:linear-gradient(180deg,#fff,#fff);border-radius:14px;padding:18px;border:1px solid rgba(0,0,0,0.06);box-shadow:0 26px 72px rgba(13,13,16,0.12);text-align:center}
+  .modal-title{font-family:Fraunces, serif;font-size:20px;margin-bottom:8px}
+  .modal-desc{color:var(--muted);margin-bottom:12px}
+  .big-confirm{padding:12px 16px;border-radius:12px;border:0;background:linear-gradient(90deg,#ff6b86,#ff2d6b);color:#fff;font-weight:800;cursor:pointer}
+  /* confetti canvas */
+  #confetti{position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:90}
+  /* admin panel hidden */
+  .admin-panel{display:none;background:var(--card);padding:12px;border-radius:12px;border:1px solid rgba(0,0,0,0.04);box-shadow:0 12px 38px rgba(13,13,16,0.06);margin-top:16px}
+  .admin-list{display:flex;flex-wrap:wrap;gap:8px}
+  .admin-btn{padding:8px 10px;border-radius:8px;border:0;background:linear-gradient(90deg,#ff7a91,#ff4d6d);color:#fff;font-weight:700;cursor:pointer}
+  /* responsive */
+  @media (max-width:560px){.hero-card{flex-direction:column;align-items:flex-start}.hero-right{width:100%}.title{font-size:22px}.logo{width:54px;height:54px}}
 </style>
 </head>
 <body>
-
-<!-- HIDDEN LOCAL PATH (optional; uploaded file you used earlier) -->
-<!-- file path for optional use: /mnt/data/30182b92-c7d6-4720-a54d-db6222001c39.png -->
-
-<!-- START SCREEN -->
+<!-- CONFETTI CANVAS -->
+<canvas id="confetti"></canvas>
+<!-- START HERO -->
 <section id="start" class="start-screen">
-  <div class="start-title" aria-hidden="false">
-    <span style="display:flex;flex-direction:column;align-items:center">
-      <span style="font-size:14px;color:rgba(255,255,255,0.95);font-weight:700">Bienvenida a</span>
-      <span style="font-size:34px;line-height:1;color:#fff;font-weight:900">Cuponera del Amor</span>
-    </span>
-    <span class="start-heart" aria-hidden="true">❤</span>
+  <div class="hero-card">
+    <div class="hero-left">
+      <div class="brand">
+        <div class="logo">❤</div>
+        <div>
+          <div class="title">Cuponera del Amor</div>
+          <div class="subtitle">Detalles románticos, sorpresas para ustedes dos</div>
+        </div>
+      </div>
+      <div style="margin-top:12px;color:var(--muted)">Una colección de pequeños gestos para sorprenderla. Cuando ella canjee uno, recibirás una notificación privada en tu Discord.</div>
+      <button id="enterBtn" class="enter-btn">Entrar a la cuponera</button>
+    </div>
+    <div class="hero-right">
+      <div class="heart-big">💗</div>
+      <div style="font-weight:700;color:var(--muted);text-align:center">Listo para momentos inolvidables</div>
+    </div>
   </div>
-
-  <button id="enterBtn" class="enter-btn" aria-label="Ingresar a la cuponera">Ingresar</button>
-
-  <!-- big hearts (decorative) -->
-  <div class="big-heart" style="left:6vw; animation-delay:0s">❤</div>
-  <div class="big-heart" style="left:40vw; animation-delay:1s; font-size:48px">💗</div>
-  <div class="big-heart" style="left:72vw; animation-delay:2s; font-size:56px">💖</div>
 </section>
 
 <!-- MAIN CONTENT -->
-<main id="app" class="main" aria-hidden="true">
-  <header class="header">
-    <div class="site-title">
-      <span style="font-size:18px">Cuponera del Amor</span>
-      <span id="titleHeart" class="site-heart" title="presiona 3 veces para opciones">❤</span>
+<main id="app" aria-hidden="true">
+  <header>
+    <div class="site-left">
+      <div class="site-title">Cuponera del Amor</div>
+      <div id="titleHeart" class="site-heart" title="Toca 3 veces para abrir opciones">❤</div>
+    </div>
+    <div class="controls">
+      <button id="resetView" class="small-btn" title="Ver cupones restantes">Ver estado</button>
+      <button id="helpBtn" class="small-btn">Ayuda</button>
     </div>
   </header>
 
-  <!-- floating decorative hearts -->
-  <div id="heartsContainer" aria-hidden="true"></div>
-
-  <!-- coupons grid -->
   <section class="grid" id="grid"></section>
 
-  <!-- admin panel (hidden by default) -->
   <div id="adminPanel" class="admin-panel" aria-hidden="true">
-    <div style="font-weight:800;color:#222;margin-bottom:8px">Panel secreto — Re-stock individual</div>
+    <div style="font-weight:800;color:#222;margin-bottom:8px">Panel secreto — Re-stock</div>
     <div class="admin-list" id="adminList"></div>
   </div>
+
 </main>
 
+<!-- Modal confirm -->
+<div id="modal" class="modal" role="dialog" aria-hidden="true">
+  <div class="modal-card">
+    <div class="modal-title" id="modalTitle">Confirmar canje</div>
+    <div class="modal-desc" id="modalDesc">¿Deseas canjear este cupón?</div>
+    <div style="display:flex;gap:10px;justify-content:center;margin-top:12px">
+      <button id="modalCancel" class="small-btn">Cancelar</button>
+      <button id="modalConfirm" class="big-confirm">Sí, canjear</button>
+    </div>
+  </div>
+</div>
+
 <script>
-/* ===========================
-   Datos: Nombres reales de los 14 cupones
-   =========================== */
-const NOMBRES = [
-  "Para una tarde de películas",
-  "Para una tarde de videojuegos",
-  "Para pintar cuadros",
-  "Para un día de skin care",
-  "Para un masaje con final feliz",
-  "Para consentirte un día",
-  "Válido por 20 abrazos",
-  "Para un regalo",
-  "Por un día hacer lo que quieras",
-  "Por un besito",
-  "Para ir al cine",
-  "Compras en Temu",
-  "Comprarte lo que quieras",
-  "Repetir cualquier cupón"
+/* ==================== CONFIG ==================== */
+const WEBHOOK_URL = "https://discord.com/api/webhooks/1443241851032309854/c-DNoO_Dr8WEDAKtxfrCIt4GALrC_SZDZLqNXgQvrYyFSzC6z98e3wxsYkiRkoXUjlmk"; // tu webhook ya incluido
+const LS_KEY = 'cuponera_premium_v1';
+
+/* ==================== DATA (14 cupones) ==================== */
+const COUPONS = [
+  {emoji:'🎬',title:'Para una tarde de películas',desc:'Palomitas y sofá'},
+  {emoji:'🎮',title:'Para una tarde de videojuegos',desc:'Tu elección de juego'},
+  {emoji:'🎨',title:'Para pintar cuadros',desc:'Pintura y lienzos'},
+  {emoji:'🧖‍♀️',title:'Para un día de skin care',desc:'Tiempo de mimos'},
+  {emoji:'💆‍♂️',title:'Para un masaje con final feliz',desc:'Relajación total'},
+  {emoji:'🍰',title:'Para consentirte un día',desc:'Dulces y detalles'},
+  {emoji:'🤗',title:'Válido por 20 abrazos',desc:'Abrazos interminables'},
+  {emoji:'🎁',title:'Para un regalo',desc:'Sorpresa especial'},
+  {emoji:'🌞',title:'Por un día hacer lo que quieras',desc:'Tu día, tus reglas'},
+  {emoji:'💋',title:'Por un besito',desc:'Beso dulce'},
+  {emoji:'🎞️',title:'Para ir al cine',desc:'Palomitas y pantalla grande'},
+  {emoji:'🛍️',title:'Compras en Temu',desc:'nos vamos de compras enana'},
+  {emoji:'💳',title:'Comprarte lo que quieras',desc:'Capricho permitido'},
+  {emoji:'🔁',title:'Repetir cualquier cupón',desc:'Repite tu favorito'}
 ];
 
-/* localStorage keys */
-const LS_KEY = "cuponera_estados_v2";
-
-/* load states or initialize */
-let estados = {}; // values: "available" | "confirm" | "redeemed"
+/* ==================== STATE ==================== */
+let state = {}; // index => 'available'|'confirm'|'redeemed'
 const saved = localStorage.getItem(LS_KEY);
-if(saved){
-  try{ estados = JSON.parse(saved); }catch(e){ estados = {}; }
-}
-NOMBRES.forEach((_,i)=>{ if(!(i in estados)) estados[i] = "available"; });
+if(saved){ try{ state = JSON.parse(saved); }catch(e){ state = {}; }}
+COUPONS.forEach((_,i)=>{ if(!(i in state)) state[i] = 'available'; });
 
 /* DOM refs */
-const start = document.getElementById("start");
-const enterBtn = document.getElementById("enterBtn");
-const app = document.getElementById("app");
-const grid = document.getElementById("grid");
-const heartsContainer = document.getElementById("heartsContainer");
-const titleHeart = document.getElementById("titleHeart");
-const adminPanel = document.getElementById("adminPanel");
-const adminList = document.getElementById("adminList");
+const start = document.getElementById('start');
+const enterBtn = document.getElementById('enterBtn');
+const app = document.getElementById('app');
+const grid = document.getElementById('grid');
+const titleHeart = document.getElementById('titleHeart');
+const adminPanel = document.getElementById('adminPanel');
+const adminList = document.getElementById('adminList');
+const modal = document.getElementById('modal');
+const modalTitle = document.getElementById('modalTitle');
+const modalDesc = document.getElementById('modalDesc');
+const modalConfirm = document.getElementById('modalConfirm');
+const modalCancel = document.getElementById('modalCancel');
+const confettiCanvas = document.getElementById('confetti');
 
-/* show start -> main transition */
-enterBtn.addEventListener("click", () => {
-  start.style.opacity = 0;
-  setTimeout(()=> { start.style.display = "none"; openMain(); }, 600);
-});
+/* enter */
+enterBtn.addEventListener('click', ()=>{ start.style.display='none'; openMain(); });
+function openMain(){ app.style.display='block'; app.setAttribute('aria-hidden','false'); renderGrid(); }
 
-function openMain(){
-  app.style.display = "block";
-  app.setAttribute("aria-hidden","false");
-  renderGrid();
-}
+/* render grid */
+function renderGrid(){ grid.innerHTML=''; COUPONS.forEach((c,i)=>{
+  const s = state[i];
+  const card = document.createElement('article'); card.className='card'+(s==='redeemed'?' agotado':'');
+  const emoji = document.createElement('div'); emoji.className='cup-emoji'; emoji.textContent=c.emoji;
+  const t = document.createElement('div'); t.className='cup-title'; t.textContent=c.title;
+  const d = document.createElement('div'); d.className='cup-desc'; d.textContent=c.desc;
+  const btn = document.createElement('button'); btn.className='btn-claim'; btn.id='btn_'+i;
+  const status = document.createElement('div'); status.className='status';
+  if(s==='available'){ btn.textContent='Canjear'; status.textContent='Disponible'; }
+  else if(s==='confirm'){ btn.textContent='Confirmar'; btn.classList.add('btn-confirm'); status.textContent='Confirmación pendiente'; }
+  else if(s==='redeemed'){ btn.style.display='none'; status.textContent='Canjeado'; }
 
-/* render coupons */
-function renderGrid(){
-  grid.innerHTML = "";
-  NOMBRES.forEach((nombre, idx) => {
-    const state = estados[idx] || "available";
-    const card = document.createElement("article");
-    card.className = "card" + (state === "redeemed" ? " agotado" : "");
-    card.setAttribute("data-idx",idx);
-
-    const content = document.createElement("div");
-    content.style.width = "100%";
-    content.style.display = "flex";
-    content.style.flexDirection = "column";
-    content.style.alignItems = "center";
-
-    const title = document.createElement("div");
-    title.className = "cup-title";
-    title.textContent = nombre;
-
-    const sub = document.createElement("div");
-    sub.className = "cup-sub";
-    sub.textContent = state === "available" ? "Stock: 1 disponible" : (state === "confirm" ? "Presiona confirmar para canjear" : "");
-
-    const btn = document.createElement("button");
-    btn.className = "btn-claim";
-    btn.id = "btn_" + idx;
-
-    if(state === "available"){
-      btn.textContent = "Canjear";
-      btn.classList.remove("confirm");
-      btn.disabled = false;
-    } else if(state === "confirm"){
-      btn.textContent = "Confirmar";
-      btn.classList.add("confirm");
-      btn.disabled = false;
-    } else if(state === "redeemed"){
-      btn.style.display = "none";
+  btn.addEventListener('click', ()=>{
+    if(state[i]==='available'){ state[i]='confirm'; saveState(); }
+    else if(state[i]==='confirm'){ // open modal to confirm
+      showModal(i);
     }
-
-    const status = document.createElement("div");
-    status.className = "status-msg";
-    if(state === "redeemed"){
-      status.innerHTML = '<div class="thanks">Gracias por canjear tu cupón! ❤️</div><div class="status-agotado">AGOTADO</div>';
-    }
-
-    /* handle click behavior */
-    btn.addEventListener("click", () => {
-      const cur = estados[idx];
-      if(cur === "available"){
-        estados[idx] = "confirm";
-        saveAndRerender();
-      } else if(cur === "confirm"){
-        // Show thanks message briefly then mark redeemed
-        estados[idx] = "redeemed";
-        saveAndRerender();
-      }
-    });
-
-    /* admin re-stock small button inside card (hidden visually, admin panel will do restock) */
-    // assemble
-    content.appendChild(title);
-    content.appendChild(sub);
-    content.appendChild(btn);
-    content.appendChild(status);
-    card.appendChild(content);
-    grid.appendChild(card);
   });
 
-  renderAdminList();
-}
+  card.appendChild(status); card.appendChild(emoji); card.appendChild(t); card.appendChild(d); card.appendChild(btn);
+  grid.appendChild(card);
+});
+renderAdminList(); }
 
-/* save to localStorage */
-function saveAndRerender(){
-  localStorage.setItem(LS_KEY, JSON.stringify(estados));
-  renderGrid();
-}
+/* save */
+function saveState(){ localStorage.setItem(LS_KEY, JSON.stringify(state)); renderGrid(); }
 
-/* admin functions: build list of restock buttons */
-function renderAdminList(){
-  adminList.innerHTML = "";
-  NOMBRES.forEach((n,i)=>{
-    const b = document.createElement("button");
-    b.className = "admin-btn";
-    b.textContent = `${i+1}. ${n}`;
-    b.addEventListener("click", ()=>{
-      if(confirm(`Restablecer "${n}" a Disponible?`)){
-        estados[i] = "available";
-        saveAndRerender();
-      }
-    });
-    adminList.appendChild(b);
-  });
-}
-
-/* secret: show admin panel after 3 quick clicks on titleHeart */
-let clicks = [];
-titleHeart.addEventListener("click", ()=>{
-  const now = Date.now();
-  clicks.push(now);
-  if(clicks.length>3) clicks.shift();
-  if(clicks.length===3 && (clicks[2]-clicks[0])<700){
-    if(adminPanel.style.display === "block"){
-      adminPanel.style.display = "none";
-      adminPanel.setAttribute("aria-hidden","true");
-    } else {
-      adminPanel.style.display = "block";
-      adminPanel.setAttribute("aria-hidden","false");
-      adminPanel.scrollIntoView({behavior:"smooth",block:"center"});
-    }
-  }
+/* modal handling */
+let currentIndex = null;
+function showModal(index){ currentIndex = index; modalTitle.textContent = 'Confirmar canje'; modalDesc.textContent = `¿Deseas canjear: "${COUPONS[index].title}" ?`;
+ modal.classList.add('show'); modal.setAttribute('aria-hidden','false'); }
+modalCancel.addEventListener('click', ()=>{ modal.classList.remove('show'); modal.setAttribute('aria-hidden','true'); currentIndex=null; });
+modalConfirm.addEventListener('click', ()=>{
+  if(currentIndex===null) return; state[currentIndex] = 'redeemed'; saveState(); modal.classList.remove('show'); modal.setAttribute('aria-hidden','true'); triggerEffects(currentIndex); sendDiscord(currentIndex); currentIndex=null;
 });
 
-/* create floating decorative hearts continuously */
-function createFloatingHeart(){
-  const el = document.createElement("div");
-  el.className = "floating-heart";
-  el.textContent = ["❤","💗","💖"][Math.floor(Math.random()*3)];
-  el.style.left = (Math.random()*90) + "vw";
-  el.style.fontSize = (12 + Math.random()*20) + "px";
-  heartsContainer.appendChild(el);
-  setTimeout(()=> el.remove(),5200);
-}
-setInterval(createFloatingHeart,450);
+/* admin panel render */
+function renderAdminList(){ adminList.innerHTML=''; COUPONS.forEach((c,i)=>{
+  const b = document.createElement('button'); b.className='admin-btn'; b.textContent = `${i+1}. ${c.title}`;
+  b.addEventListener('click', ()=>{
+    if(confirm(`Restablecer "${c.title}" a Disponible?`)){
+      state[i] = 'available'; saveState(); alert('Restablecido.');
+    }
+  });
+  adminList.appendChild(b);
+}); }
 
-/* ensure main hides on load; show start screen */
-(function init(){
-  app.style.display = "none";
-  adminPanel.style.display = "none";
-  renderGrid();
+/* secret: show admin after 3 quick taps */
+let clicks=[]; titleHeart.addEventListener('click', ()=>{ const now=Date.now(); clicks.push(now); if(clicks.length>3) clicks.shift(); if(clicks.length===3 && (clicks[2]-clicks[0])<700){
+  if(adminPanel.style.display==='block'){ adminPanel.style.display='none'; adminPanel.setAttribute('aria-hidden','true'); }
+  else{ adminPanel.style.display='block'; adminPanel.setAttribute('aria-hidden','false'); adminPanel.scrollIntoView({behavior:'smooth',block:'center'}); }
+}});
+
+/* effects: confetti + sound */
+function triggerEffects(idx){ launchConfetti(); playPop(); showToast(`Canjeado: ${COUPONS[idx].title}`); }
+
+/* simple toast */
+function showToast(text){ const el = document.createElement('div'); el.style.position='fixed'; el.style.right='18px'; el.style.bottom='18px'; el.style.background='linear-gradient(90deg,#ff7a91,#ff4d6d)'; el.style.color='#fff'; el.style.padding='10px 14px'; el.style.borderRadius='12px'; el.style.boxShadow='0 10px 30px rgba(0,0,0,0.12)'; el.style.fontWeight='700'; el.textContent=text; document.body.appendChild(el); setTimeout(()=> el.style.opacity='0',2200); setTimeout(()=> el.remove(),2600); }
+
+/* minimal confetti implementation */
+const confettiCtx = confettiCanvas.getContext('2d');
+function resizeCanvas(){ confettiCanvas.width = window.innerWidth; confettiCanvas.height = window.innerHeight; }
+window.addEventListener('resize', resizeCanvas); resizeCanvas();
+let confettiPieces = [];
+function launchConfetti(){ confettiPieces = []; const count = 90; for(let i=0;i<count;i++){ confettiPieces.push({x:Math.random()*confettiCanvas.width, y:-Math.random()*confettiCanvas.height, r:4+Math.random()*8, d:Math.random()*50+2, tilt:Math.random()*20-10, color:['#ff6b86','#ffd1df','#ffd27a','#ff9fbf'][Math.floor(Math.random()*4)], vx:(Math.random()-0.5)*6, vy:2+Math.random()*6, ttl:200}); }
+ animateConfetti(); }
+let confettiRAF=null;
+function animateConfetti(){ if(confettiRAF) cancelAnimationFrame(confettiRAF); function frame(){ confettiCtx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height);
+ confettiPieces.forEach((p)=>{ p.x += p.vx; p.y += p.vy; p.tilt += 0.5; p.vy += 0.03; p.ttl--; confettiCtx.fillStyle = p.color; confettiCtx.beginPath(); confettiCtx.ellipse(p.x, p.y, p.r, p.r*0.6, p.tilt*Math.PI/180, 0, Math.PI*2); confettiCtx.fill(); });
+ confettiPieces = confettiPieces.filter(p=>p.ttl>0 && p.y < confettiCanvas.height + 100);
+ if(confettiPieces.length>0) confettiRAF = requestAnimationFrame(frame); else cancelAnimationFrame(confettiRAF);
+ }
+ frame(); }
+
+/* sound using WebAudio */
+function playPop(){ try{ const ctx = new (window.AudioContext||window.webkitAudioContext)(); const o = ctx.createOscillator(); const g = ctx.createGain(); o.type='sine'; o.frequency.value=880; g.gain.value=0.0001; o.connect(g); g.connect(ctx.destination); o.start(); g.gain.exponentialRampToValueAtTime(0.12, ctx.currentTime + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.28); o.stop(ctx.currentTime + 0.3);}catch(e){}
+}
+
+/* Device friendly detection */
+function detectDevice(){ const ua = navigator.userAgent || navigator.vendor || window.opera; if(/android/i.test(ua)) return 'Móvil (Android)'; if(/iPhone|iPad|iPod/i.test(ua)) return 'Móvil (iOS)'; return 'Escritorio'; }
+
+/* send discord notification (informativo con fecha/hora y dispositivo) */
+function sendDiscord(index){
+  const coupon = COUPONS[index];
+  const now = new Date();
+  const fecha = now.toLocaleDateString();
+  const hora = now.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+  const dispositivo = detectDevice();
+  const content = `💖 *Cupón canjeado* 💖\n**Cupón:** ${coupon.title}\n**Fecha:** ${fecha}\n**Hora:** ${hora}\n**Dispositivo:** ${dispositivo}\n**Estado:** CANJEADO ✔️`;
+  // POST to webhook
+  fetch(WEBHOOK_URL, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content})}).catch(e=>{console.warn('No se pudo enviar webhook',e)});
+}
+
+/* small helpers */
+function clearAll(){ if(confirm('Resetear todos los cupones a Disponible?')){ COUPONS.forEach((_,i)=>state[i]='available'); saveState(); alert('Todos restablecidos'); }}
+
+/* init */
+(function init(){ app.style.display='none'; renderGrid(); document.getElementById('resetView').addEventListener('click', ()=>{ let count=0; Object.values(state).forEach(s=>{ if(s==='available') count++; }); alert(count + ' cupones disponibles'); }); document.getElementById('helpBtn').addEventListener('click', ()=>{ alert('Toca un cupón para iniciar canje; confirma para canjear. Toca 3 veces el corazón superior para abrir el panel secreto.'); });
 })();
 
-/* optional: expose reset from console if you need */
-window.resetAllCupones = function(){
-  NOMBRES.forEach((_,i)=> estados[i] = "available");
-  saveAndRerender();
-};
+/* expose reset to console if needed */
+window.resetAllCupones = clearAll;
 
 </script>
 </body>
