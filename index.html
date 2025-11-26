@@ -1,275 +1,413 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Cuponera del Amor — Premium</title>
-<link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Fraunces:opsz,wght@9..144,700&display=swap" rel="stylesheet">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Cuponera del Amor 2.5</title>
 <style>
-  :root{
-    --bg1:#fff8fb; --bg2:#fff0f6; --accent:#ff5a7a; --accent-2:#ffb3c6; --card:#ffffff;
-    --muted:#7b7b82; --glass: rgba(255,255,255,0.65);
-  }
-  *{box-sizing:border-box}
-  html,body{height:100%;margin:0;font-family:Inter, Arial, Helvetica, sans-serif;background:linear-gradient(180deg,var(--bg1) 0%,var(--bg2) 100%);color:#141214;-webkit-font-smoothing:antialiased}
-  a{color:inherit}
-  /* HERO / START */
-  .start-screen{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px;background:linear-gradient(180deg, rgba(255,90,122,0.08), rgba(255,179,198,0.06));z-index:60}
-  .hero-card{width:100%;max-width:920px;background:linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.7));border-radius:18px;padding:28px;border:1px solid rgba(0,0,0,0.04);box-shadow:0 18px 50px rgba(15,15,20,0.06);display:flex;gap:20px;align-items:center}
-  .hero-left{flex:1}
-  .brand{display:flex;align-items:center;gap:12px}
-  .logo{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-family:Fraunces,serif;font-size:28px;box-shadow:0 8px 26px rgba(255,90,122,0.18)}
-  .title{font-family:Fraunces, serif;font-size:28px;margin:6px 0 0;color:#3a1222}
-  .subtitle{color:var(--muted);margin-top:6px}
-  .enter-btn{margin-top:16px;padding:12px 20px;border-radius:12px;border:0;background:linear-gradient(90deg,var(--accent),#ff7a91);color:#fff;font-weight:700;cursor:pointer;box-shadow:0 10px 30px rgba(255,90,122,0.14)}
-  .enter-btn:active{transform:translateY(1px)}
-  .hero-right{width:260px;display:flex;flex-direction:column;align-items:center;gap:12px}
-  .heart-big{font-size:44px}
-  /* MAIN */
-  main{display:none;padding:20px;max-width:1100px;margin:0 auto}
-  header{display:flex;align-items:center;justify-content:space-between;gap:12px}
-  .site-left{display:flex;align-items:center;gap:12px}
-  .site-title{font-family:Fraunces, serif;color:#3a1222;font-size:20px;font-weight:700}
-  .site-heart{font-size:20px;color:var(--accent);cursor:pointer;user-select:none}
-  .controls{display:flex;gap:8px;align-items:center}
-  .small-btn{padding:8px 10px;border-radius:10px;border:0;background:var(--card);box-shadow:0 8px 18px rgba(13,13,16,0.04);cursor:pointer;font-weight:700}
-  /* GRID */
-  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:18px}
-  .card{background:var(--card);padding:14px;border-radius:14px;border:1px solid rgba(0,0,0,0.04);box-shadow:0 10px 26px rgba(13,13,16,0.04);display:flex;flex-direction:column;align-items:center;position:relative;overflow:hidden}
-  .cup-emoji{font-size:30px;margin-bottom:6px}
-  .cup-title{font-weight:800;text-align:center;color:#2b1b23;margin-bottom:6px}
-  .cup-desc{font-size:13px;color:var(--muted);margin-bottom:12px;text-align:center}
-  .btn-claim{width:100%;padding:10px;border-radius:10px;border:0;background:linear-gradient(90deg,#5ec46b,#28a745);color:#fff;font-weight:800;cursor:pointer}
-  .btn-confirm{background:linear-gradient(90deg,#ffcf5e,#e6b800);}
-  .card.agotado{opacity:.6;transform:scale(.995)}
-  .status{position:absolute;left:10px;top:10px;padding:6px 8px;border-radius:10px;background:rgba(255,90,122,0.06);font-weight:700;color:#d43a5a;font-size:12px}
-  /* modal */
-  .modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(10,10,10,0.25);z-index:80;opacity:0;pointer-events:none;transition:opacity .18s linear}
-  .modal.show{opacity:1;pointer-events:auto}
-  .modal-card{width:100%;max-width:560px;background:linear-gradient(180deg,#fff,#fff);border-radius:14px;padding:18px;border:1px solid rgba(0,0,0,0.06);box-shadow:0 26px 72px rgba(13,13,16,0.12);text-align:center}
-  .modal-title{font-family:Fraunces, serif;font-size:20px;margin-bottom:8px}
-  .modal-desc{color:var(--muted);margin-bottom:12px}
-  .big-confirm{padding:12px 16px;border-radius:12px;border:0;background:linear-gradient(90deg,#ff6b86,#ff2d6b);color:#fff;font-weight:800;cursor:pointer}
-  /* confetti canvas */
-  #confetti{position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:90}
-  /* admin panel hidden */
-  .admin-panel{display:none;background:var(--card);padding:12px;border-radius:12px;border:1px solid rgba(0,0,0,0.04);box-shadow:0 12px 38px rgba(13,13,16,0.06);margin-top:16px}
-  .admin-list{display:flex;flex-wrap:wrap;gap:8px}
-  .admin-btn{padding:8px 10px;border-radius:8px;border:0;background:linear-gradient(90deg,#ff7a91,#ff4d6d);color:#fff;font-weight:700;cursor:pointer}
-  /* responsive */
-  @media (max-width:560px){.hero-card{flex-direction:column;align-items:flex-start}.hero-right{width:100%}.title{font-size:22px}.logo{width:54px;height:54px}}
+/* ======================
+   ESTILOS GENERALES
+   ====================== */
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", sans-serif;
+  background: #fff0f6;
+  overflow-x: hidden;
+}
+
+.hidden { display:none; }
+
+/* ======================
+   PANTALLA DE CARGA
+   ====================== */
+#loader {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background: linear-gradient(180deg,#ffd6e9,#ffb7d5);
+  z-index: 2000;
+  animation: fadeOut 1s ease forwards;
+  animation-delay: 2.8s;
+}
+
+@keyframes fadeOut {
+  to { opacity:0; visibility:hidden; }
+}
+
+.loader-heart {
+  font-size: 60px;
+  animation: beat 1s infinite;
+}
+
+@keyframes beat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.25); }
+}
+
+/* ======================
+   LOGIN
+   ====================== */
+#loginScreen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background: linear-gradient(180deg,#ffe1ef,#ffc0d9,#ffa9ca);
+  z-index: 1500;
+  opacity: 0;
+  animation: fadeIn 1.2s ease forwards;
+  animation-delay: 3s;
+}
+
+@keyframes fadeIn { to { opacity:1; } }
+
+.login-box {
+  background: #ffffffcc;
+  padding: 20px 30px;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+  backdrop-filter: blur(6px);
+}
+
+.login-box h2 {
+  margin: 0 0 10px;
+  color: #d8006b;
+}
+
+.login-input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 10px;
+  border: 1px solid #ff96c0;
+}
+
+.login-btn {
+  margin-top: 14px;
+  width: 100%;
+  padding: 10px;
+  background: #ff4d88;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.login-btn:hover { transform: scale(1.03); }
+
+/* mensajes flotantes suaves */
+.floating-text {
+  position: fixed;
+  color: #ff78a8;
+  font-weight: 700;
+  opacity: 0.25;
+  animation: floatMsg 10s linear infinite;
+  pointer-events: none;
+  z-index: 100;
+  font-size: 22px;
+}
+
+@keyframes floatMsg {
+  0% { transform: translateY(0) translateX(0); }
+  100% { transform: translateY(-120vh) translateX(30px); }
+}
+
+/* ======================
+   MENSAJE DE BIENVENIDA
+   ====================== */
+#welcomeScreen {
+  position: fixed;
+  inset: 0;
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  z-index: 1400;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s;
+}
+
+#welcomeScreen.show {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* ======================
+   CUPOnerA PRINCIPAL
+   ====================== */
+#app {
+  display:none;
+  padding: 20px;
+  max-width: 1100px;
+  margin: auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px,1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.card {
+  background: #fff;
+  padding: 15px;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  text-align: center;
+  transition: 0.25s;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+}
+
+.btn-claim {
+  width:100%;
+  padding: 10px;
+  background: #28a745;
+  border: none;
+  color:#fff;
+  border-radius: 10px;
+  cursor:pointer;
+  font-weight:700;
+}
+
+/* ======================
+   CANJE ANIMADO
+   ====================== */
+#redeemPopup {
+  position: fixed;
+  inset: 0;
+  background: rgba(255,255,255,0.8);
+  backdrop-filter: blur(6px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align:center;
+  z-index: 3000;
+  opacity: 0;
+  pointer-events:none;
+  transition: opacity 0.4s ease;
+  font-size:30px;
+  font-weight:800;
+  color:#d10054;
+}
+
+#redeemPopup.show {
+  opacity:1;
+  pointer-events: all;
+}
+
+/* ======================
+   MÚSICA
+   ====================== */
+#audioControls {
+  position: fixed;
+  bottom: 14px;
+  right: 14px;
+  z-index: 5000;
+}
+
+.music-btn {
+  background:#ff4d88;
+  border:none;
+  padding:12px 16px;
+  color:#fff;
+  border-radius:50px;
+  cursor:pointer;
+  font-weight:700;
+  box-shadow:0 4px 14px rgba(0,0,0,0.15);
+}
 </style>
 </head>
 <body>
-<!-- CONFETTI CANVAS -->
-<canvas id="confetti"></canvas>
-<!-- START HERO -->
-<section id="start" class="start-screen">
-  <div class="hero-card">
-    <div class="hero-left">
-      <div class="brand">
-        <div class="logo">❤</div>
-        <div>
-          <div class="title">Cuponera del Amor</div>
-          <div class="subtitle">Detalles románticos, sorpresas para ti</div>
-        </div>
-      </div>
-      <div style="margin-top:12px;color:var(--muted)">Una colección de pequeños gestos para ti.</div>
-      <button id="enterBtn" class="enter-btn">Entrar a la cuponera</button>
-    </div>
-    <div class="hero-right">
-      <div class="heart-big">💗</div>
-      <div style="font-weight:700;color:var(--muted);text-align:center">Lista para momentos inolvidables</div>
-    </div>
-  </div>
-</section>
 
-<!-- MAIN CONTENT -->
-<main id="app" aria-hidden="true">
-  <header>
-    <div class="site-left">
-      <div class="site-title">Cuponera del Amor</div>
-      <div id="titleHeart" class="site-heart" title="Toca 3 veces para abrir opciones">❤</div>
-    </div>
-    <div class="controls">
-      <button id="resetView" class="small-btn" title="Ver cupones restantes">Ver estado</button>
-      <button id="helpBtn" class="small-btn">Ayuda</button>
-    </div>
-  </header>
+<!-- ===================== -->
+<!--  PANTALLA DE CARGA    -->
+<!-- ===================== -->
+<div id="loader">
+  <div class="loader-heart">❤</div>
+  <p style="color:#fff;font-weight:700;margin-top:10px">Cargando amor...</p>
+</div>
 
-  <section class="grid" id="grid"></section>
-
-  <div id="adminPanel" class="admin-panel" aria-hidden="true">
-    <div style="font-weight:800;color:#222;margin-bottom:8px">Panel secreto — Re-stock</div>
-    <div class="admin-list" id="adminList"></div>
-  </div>
-
-</main>
-
-<!-- Modal confirm -->
-<div id="modal" class="modal" role="dialog" aria-hidden="true">
-  <div class="modal-card">
-    <div class="modal-title" id="modalTitle">Confirmar canje</div>
-    <div class="modal-desc" id="modalDesc">¿Deseas canjear este cupón?</div>
-    <div style="display:flex;gap:10px;justify-content:center;margin-top:12px">
-      <button id="modalCancel" class="small-btn">Cancelar</button>
-      <button id="modalConfirm" class="big-confirm">Sí, canjear</button>
-    </div>
+<!-- ===================== -->
+<!--  LOGIN                -->
+<!-- ===================== -->
+<div id="loginScreen">
+  <div class="login-box">
+    <h2>Credenciales de la muñequita linda</h2>
+    <input id="userInput" class="login-input" placeholder="Usuario" />
+    <input id="passInput" class="login-input" placeholder="Contraseña" />
+    <button class="login-btn" onclick="attemptLogin()">Entrar</button>
   </div>
 </div>
 
-<script>
-/* ==================== CONFIG ==================== */
-const WEBHOOK_URL = "https://discord.com/api/webhooks/1443241851032309854/c-DNoO_Dr8WEDAKtxfrCIt4GALrC_SZDZLqNXgQvrYyFSzC6z98e3wxsYkiRkoXUjlmk"; // tu webhook ya incluido
-const LS_KEY = 'cuponera_premium_v1';
+<!-- Mensajes flotantes -->
+<div class="floating-text" style="left:10vw; animation-delay:0s">Te Amo ❤</div>
+<div class="floating-text" style="left:50vw; animation-delay:4s">Eres mi vida 💗</div>
+<div class="floating-text" style="left:75vw; animation-delay:2s">Mi princesa 💖</div>
 
-/* ==================== DATA (14 cupones) ==================== */
-const COUPONS = [
-  {emoji:'🎬',title:'Para una tarde de películas',desc:'Palomitas y sofá'},
-  {emoji:'🎮',title:'Para una tarde de videojuegos',desc:'Tu elección de juego'},
-  {emoji:'🎨',title:'Para pintar cuadros',desc:'Pintura y lienzos'},
-  {emoji:'🧖‍♀️',title:'Para un día de skin care',desc:'Tiempo de mimos'},
-  {emoji:'💆‍♂️',title:'Para un masaje con final feliz',desc:'Relajación total'},
-  {emoji:'🍰',title:'Para consentirte un día',desc:'Dulces y detalles'},
-  {emoji:'🤗',title:'Válido por 20 abrazos',desc:'Abrazos interminables'},
-  {emoji:'🎁',title:'Para un regalo',desc:'Sorpresa especial'},
-  {emoji:'🌞',title:'Por un día hacer lo que quieras',desc:'Tu día, tus reglas'},
-  {emoji:'💋',title:'Por un besito',desc:'Beso dulce'},
-  {emoji:'🎞️',title:'Para ir al cine',desc:'Palomitas y pantalla grande'},
-  {emoji:'🛍️',title:'Compras en Temu',desc:'nos vamos de compras enana'},
-  {emoji:'💳',title:'Comprarte lo que quieras',desc:'Capricho permitido'},
-  {emoji:'🔁',title:'Repetir cualquier cupón',desc:'Repite tu favorito'}
+<!-- ===================== -->
+<!--  PANTALLA BIENVENIDA -->
+<!-- ===================== -->
+<div id="welcomeScreen">
+  <h1 style="font-size:38px;color:#d10054">Bienvenida corazón 💖</h1>
+  <p style="font-size:20px;margin-top:6px">Ya puedes usar tus cupones</p>
+</div>
+
+<!-- ===================== -->
+<!--  CUPOnerA            -->
+<!-- ===================== -->
+<main id="app">
+  <h1 style="color:#ff4d88;text-align:center">Cuponera del Amor 2.5</h1>
+  <section id="grid" class="grid"></section>
+</main>
+
+<!-- ===================== -->
+<!-- POPUP CANJE          -->
+<!-- ===================== -->
+<div id="redeemPopup">¡Canjeado con éxito! ❤</div>
+
+<!-- ===================== -->
+<!-- CONTROL DE MÚSICA    -->
+<!-- ===================== -->
+<div id="audioControls" class="hidden">
+  <button class="music-btn" onclick="toggleMusic()">⏸ Música</button>
+</div>
+
+<audio id="bgMusic" loop preload="auto"></audio>
+
+<script>
+/* ===================
+   CONFIGURACIÓN
+   =================== */
+const MUSIC_URL = "https://docs.google.com/uc?export=download&id=1Dx5JaKuDL3OmWD3sIMhf0SGot2lMjbXB";
+const WEBHOOK = "https://discord.com/api/webhooks/1443241851032309854/c-DNoO_Dr8WEDAKtxfrCIt4GALrC_SZDZLqNXgQvrYyFSzC6z98e3wxsYkiRkoXUjlmk";
+
+const NOMBRES = [
+  "Tarde de películas juntos",
+  "Videojuegos para dos",
+  "Pintar cuadros",
+  "Día completo de skin care",
+  "Masaje con final feliz",
+  "Día para consentirte",
+  "20 abrazos extra",
+  "Un regalo sorpresa",
+  "Día donde tú mandas",
+  "Un besito especial",
+  "Ir al cine",
+  "Compras en Temu",
+  "Eliges un regalo",
+  "Repetir cualquier cupón"
 ];
 
-/* ==================== STATE ==================== */
-let state = {}; // index => 'available'|'confirm'|'redeemed'
-const saved = localStorage.getItem(LS_KEY);
-if(saved){ try{ state = JSON.parse(saved); }catch(e){ state = {}; }}
-COUPONS.forEach((_,i)=>{ if(!(i in state)) state[i] = 'available'; });
+let estados = JSON.parse(localStorage.getItem("cuponera_v2_5") || "{}");
+NOMBRES.forEach((_,i)=>{ if(!estados[i]) estados[i]="available" });
 
-/* DOM refs */
-const start = document.getElementById('start');
-const enterBtn = document.getElementById('enterBtn');
-const app = document.getElementById('app');
-const grid = document.getElementById('grid');
-const titleHeart = document.getElementById('titleHeart');
-const adminPanel = document.getElementById('adminPanel');
-const adminList = document.getElementById('adminList');
-const modal = document.getElementById('modal');
-const modalTitle = document.getElementById('modalTitle');
-const modalDesc = document.getElementById('modalDesc');
-const modalConfirm = document.getElementById('modalConfirm');
-const modalCancel = document.getElementById('modalCancel');
-const confettiCanvas = document.getElementById('confetti');
+/* ===================
+   LOGIN
+   =================== */
+function attemptLogin(){
+  const u = document.getElementById("userInput").value.trim();
+  const p = document.getElementById("passInput").value.trim();
 
-/* enter */
-enterBtn.addEventListener('click', ()=>{ start.style.display='none'; openMain(); });
-function openMain(){ app.style.display='block'; app.setAttribute('aria-hidden','false'); renderGrid(); }
-
-/* render grid */
-function renderGrid(){ grid.innerHTML=''; COUPONS.forEach((c,i)=>{
-  const s = state[i];
-  const card = document.createElement('article'); card.className='card'+(s==='redeemed'?' agotado':'');
-  const emoji = document.createElement('div'); emoji.className='cup-emoji'; emoji.textContent=c.emoji;
-  const t = document.createElement('div'); t.className='cup-title'; t.textContent=c.title;
-  const d = document.createElement('div'); d.className='cup-desc'; d.textContent=c.desc;
-  const btn = document.createElement('button'); btn.className='btn-claim'; btn.id='btn_'+i;
-  const status = document.createElement('div'); status.className='status';
-  if(s==='available'){ btn.textContent='Canjear'; status.textContent='Disponible'; }
-  else if(s==='confirm'){ btn.textContent='Confirmar'; btn.classList.add('btn-confirm'); status.textContent='Confirmación pendiente'; }
-  else if(s==='redeemed'){ btn.style.display='none'; status.textContent='Canjeado'; }
-
-  btn.addEventListener('click', ()=>{
-    if(state[i]==='available'){ state[i]='confirm'; saveState(); }
-    else if(state[i]==='confirm'){ // open modal to confirm
-      showModal(i);
-    }
-  });
-
-  card.appendChild(status); card.appendChild(emoji); card.appendChild(t); card.appendChild(d); card.appendChild(btn);
-  grid.appendChild(card);
-});
-renderAdminList(); }
-
-/* save */
-function saveState(){ localStorage.setItem(LS_KEY, JSON.stringify(state)); renderGrid(); }
-
-/* modal handling */
-let currentIndex = null;
-function showModal(index){ currentIndex = index; modalTitle.textContent = 'Confirmar canje'; modalDesc.textContent = `¿Deseas canjear: "${COUPONS[index].title}" ?`;
- modal.classList.add('show'); modal.setAttribute('aria-hidden','false'); }
-modalCancel.addEventListener('click', ()=>{ modal.classList.remove('show'); modal.setAttribute('aria-hidden','true'); currentIndex=null; });
-modalConfirm.addEventListener('click', ()=>{
-  if(currentIndex===null) return; state[currentIndex] = 'redeemed'; saveState(); modal.classList.remove('show'); modal.setAttribute('aria-hidden','true'); triggerEffects(currentIndex); sendDiscord(currentIndex); currentIndex=null;
-});
-
-/* admin panel render */
-function renderAdminList(){ adminList.innerHTML=''; COUPONS.forEach((c,i)=>{
-  const b = document.createElement('button'); b.className='admin-btn'; b.textContent = `${i+1}. ${c.title}`;
-  b.addEventListener('click', ()=>{
-    if(confirm(`Restablecer "${c.title}" a Disponible?`)){
-      state[i] = 'available'; saveState(); alert('Restablecido.');
-    }
-  });
-  adminList.appendChild(b);
-}); }
-
-/* secret: show admin after 3 quick taps */
-let clicks=[]; titleHeart.addEventListener('click', ()=>{ const now=Date.now(); clicks.push(now); if(clicks.length>3) clicks.shift(); if(clicks.length===3 && (clicks[2]-clicks[0])<700){
-  if(adminPanel.style.display==='block'){ adminPanel.style.display='none'; adminPanel.setAttribute('aria-hidden','true'); }
-  else{ adminPanel.style.display='block'; adminPanel.setAttribute('aria-hidden','false'); adminPanel.scrollIntoView({behavior:'smooth',block:'center'}); }
-}});
-
-/* effects: confetti + sound */
-function triggerEffects(idx){ launchConfetti(); playPop(); showToast(`Canjeado: ${COUPONS[idx].title}`); }
-
-/* simple toast */
-function showToast(text){ const el = document.createElement('div'); el.style.position='fixed'; el.style.right='18px'; el.style.bottom='18px'; el.style.background='linear-gradient(90deg,#ff7a91,#ff4d6d)'; el.style.color='#fff'; el.style.padding='10px 14px'; el.style.borderRadius='12px'; el.style.boxShadow='0 10px 30px rgba(0,0,0,0.12)'; el.style.fontWeight='700'; el.textContent=text; document.body.appendChild(el); setTimeout(()=> el.style.opacity='0',2200); setTimeout(()=> el.remove(),2600); }
-
-/* minimal confetti implementation */
-const confettiCtx = confettiCanvas.getContext('2d');
-function resizeCanvas(){ confettiCanvas.width = window.innerWidth; confettiCanvas.height = window.innerHeight; }
-window.addEventListener('resize', resizeCanvas); resizeCanvas();
-let confettiPieces = [];
-function launchConfetti(){ confettiPieces = []; const count = 90; for(let i=0;i<count;i++){ confettiPieces.push({x:Math.random()*confettiCanvas.width, y:-Math.random()*confettiCanvas.height, r:4+Math.random()*8, d:Math.random()*50+2, tilt:Math.random()*20-10, color:['#ff6b86','#ffd1df','#ffd27a','#ff9fbf'][Math.floor(Math.random()*4)], vx:(Math.random()-0.5)*6, vy:2+Math.random()*6, ttl:200}); }
- animateConfetti(); }
-let confettiRAF=null;
-function animateConfetti(){ if(confettiRAF) cancelAnimationFrame(confettiRAF); function frame(){ confettiCtx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height);
- confettiPieces.forEach((p)=>{ p.x += p.vx; p.y += p.vy; p.tilt += 0.5; p.vy += 0.03; p.ttl--; confettiCtx.fillStyle = p.color; confettiCtx.beginPath(); confettiCtx.ellipse(p.x, p.y, p.r, p.r*0.6, p.tilt*Math.PI/180, 0, Math.PI*2); confettiCtx.fill(); });
- confettiPieces = confettiPieces.filter(p=>p.ttl>0 && p.y < confettiCanvas.height + 100);
- if(confettiPieces.length>0) confettiRAF = requestAnimationFrame(frame); else cancelAnimationFrame(confettiRAF);
- }
- frame(); }
-
-/* sound using WebAudio */
-function playPop(){ try{ const ctx = new (window.AudioContext||window.webkitAudioContext)(); const o = ctx.createOscillator(); const g = ctx.createGain(); o.type='sine'; o.frequency.value=880; g.gain.value=0.0001; o.connect(g); g.connect(ctx.destination); o.start(); g.gain.exponentialRampToValueAtTime(0.12, ctx.currentTime + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.28); o.stop(ctx.currentTime + 0.3);}catch(e){}
+  if(u.toLowerCase()==="sofia" && p==="12/15/2025"){
+    document.getElementById("loginScreen").style.display="none";
+    showWelcome();
+    startMusic();
+  } else {
+    alert("Credenciales incorrectas mi amorcito ❤️");
+  }
 }
 
-/* Device friendly detection */
-function detectDevice(){ const ua = navigator.userAgent || navigator.vendor || window.opera; if(/android/i.test(ua)) return 'Móvil (Android)'; if(/iPhone|iPad|iPod/i.test(ua)) return 'Móvil (iOS)'; return 'Escritorio'; }
-
-/* send discord notification (informativo con fecha/hora y dispositivo) */
-function sendDiscord(index){
-  const coupon = COUPONS[index];
-  const now = new Date();
-  const fecha = now.toLocaleDateString();
-  const hora = now.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
-  const dispositivo = detectDevice();
-  const content = `💖 *Cupón canjeado* 💖\n**Cupón:** ${coupon.title}\n**Fecha:** ${fecha}\n**Hora:** ${hora}\n**Dispositivo:** ${dispositivo}\n**Estado:** CANJEADO ✔️`;
-  // POST to webhook
-  fetch(WEBHOOK_URL, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content})}).catch(e=>{console.warn('No se pudo enviar webhook',e)});
+function showWelcome(){
+  const w = document.getElementById("welcomeScreen");
+  w.classList.add("show");
+  setTimeout(()=>{
+    w.classList.remove("show");
+    document.getElementById("app").style.display="block";
+    document.getElementById("audioControls").classList.remove("hidden");
+    renderGrid();
+  },3100);
 }
 
-/* small helpers */
-function clearAll(){ if(confirm('Resetear todos los cupones a Disponible?')){ COUPONS.forEach((_,i)=>state[i]='available'); saveState(); alert('Todos restablecidos'); }}
+/* ===================
+   MÚSICA
+   =================== */
+const bgMusic = document.getElementById("bgMusic");
+bgMusic.src = MUSIC_URL;
 
-/* init */
-(function init(){ app.style.display='none'; renderGrid(); document.getElementById('resetView').addEventListener('click', ()=>{ let count=0; Object.values(state).forEach(s=>{ if(s==='available') count++; }); alert(count + ' cupones disponibles'); }); document.getElementById('helpBtn').addEventListener('click', ()=>{ alert('Toca un cupón para iniciar canje; confirma para canjear. Toca 3 veces el corazón superior para abrir el panel secreto.'); });
-})();
+function startMusic(){ bgMusic.play().catch(()=>{}); }
+function toggleMusic(){
+  if(bgMusic.paused){ bgMusic.play(); }
+  else { bgMusic.pause(); }
+}
 
-/* expose reset to console if needed */
-window.resetAllCupones = clearAll;
+/* ===================
+   RENDER DE CUPOnerA
+   =================== */
+function renderGrid(){
+  const grid = document.getElementById("grid");
+  grid.innerHTML = "";
+
+  NOMBRES.forEach((titulo, i)=>{
+    const state = estados[i];
+
+    let html = `<div class='card'>
+      <h3>${titulo}</h3>
+      <p>${state==="redeemed" ? "Canjeado" : "Disponible"}</p>`;
+
+    if(state !== "redeemed")
+      html += `<button class='btn-claim' onclick='redeem(${i})'>Canjear</button>`;
+
+    html += `</div>`;
+    grid.innerHTML += html;
+  });
+}
+
+/* ===================
+   CANJE + DISCORD
+   =================== */
+function redeem(i){
+  estados[i] = "redeemed";
+  localStorage.setItem("cuponera_v2_5", JSON.stringify(estados));
+  renderGrid();
+  showRedeemPopup();
+  notifyDiscord(i);
+}
+
+function showRedeemPopup(){
+  const pop = document.getElementById("redeemPopup");
+  pop.classList.add("show");
+  setTimeout(()=> pop.classList.remove("show"), 2200);
+}
+
+function notifyDiscord(i){
+  const msg = {
+    content: `💌 **Cupón canjeado**\n❤ *${NOMBRES[i]}*\n⏰ ${new Date().toLocaleString()}`
+  };
+
+  fetch(WEBHOOK, {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body: JSON.stringify(msg)
+  });
+}
 
 </script>
 </body>
