@@ -3,258 +3,273 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Cuponera del Amor — v3</title>
+<title>Cuponera del Amor — Premium</title>
+<link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Fraunces:opsz,wght@9..144,700&display=swap" rel="stylesheet">
 <style>
-:root{--bg1:#fff6fb;--accent:#ff4d6d;--accent2:#ffb3c6;--muted:#7b7b82;--card:#fff}
-*{box-sizing:border-box}
-html,body{height:100%;margin:0;font-family:Inter,Arial,Helvetica,sans-serif;background:linear-gradient(180deg,var(--bg1),#fff0f6);color:#141214}
-/* START SCREEN */
-.start-screen{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(180deg,#ffd9e6,#ffbcd6);z-index:60}
-.hero{max-width:920px;background:linear-gradient(180deg,rgba(255,255,255,0.85),rgba(255,255,255,0.7));border-radius:18px;padding:28px;border:1px solid rgba(0,0,0,0.04);box-shadow:0 20px 60px rgba(15,15,20,0.06);display:flex;gap:20px;align-items:center;position:relative;overflow:hidden}
-.logo{width:72px;height:72px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-family:Fraunces,serif;font-size:30px}
-.hero-title{font-family:Fraunces,serif;font-size:28px;color:#3a1222;margin:0}
-.hero-sub{color:var(--muted);margin-top:6px}
-.enter-btn{margin-top:16px;padding:12px 20px;border-radius:12px;border:0;background:linear-gradient(90deg,var(--accent),#ff7a91);color:#fff;font-weight:800;cursor:pointer;box-shadow:0 10px 30px rgba(255,77,109,0.14)}
-/* floating decorative */
-.bg-float{position:absolute;inset:0;pointer-events:none}
-.float-item{position:absolute;opacity:.12;font-size:34px;animation:floatUp linear infinite}
-@keyframes floatUp{0%{transform:translateY(120%)}100%{transform:translateY(-40%);opacity:0}}
-/* LOADER */
-.loader{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;background:linear-gradient(180deg,#ffddeb,#ffc8dc);z-index:80}
-.loader-heart{font-size:48px;animation:beat 1s infinite}
-@keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
-.loader-text{margin-top:12px;font-weight:800;color:#6c1230}
-/* MAIN */
-main{display:none;padding:20px;max-width:1100px;margin:0 auto}
-.header{display:flex;align-items:center;justify-content:space-between;gap:12px}
-.site-title{font-family:Fraunces,serif;color:var(--accent);font-size:20px;font-weight:800}
-.site-heart{font-size:20px;cursor:pointer;color:var(--accent);user-select:none}
-.controls{display:flex;gap:8px}
-.small-btn{padding:8px 10px;border-radius:10px;border:0;background:var(--card);box-shadow:0 8px 18px rgba(13,13,16,0.04);cursor:pointer;font-weight:700}
-.grid{margin-top:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
-.card{background:var(--card);border-radius:14px;padding:12px;border:1px solid rgba(0,0,0,0.06);box-shadow:0 8px 20px rgba(13,13,16,0.04);display:flex;flex-direction:column;align-items:center;position:relative;transition:transform .12s}
-.card:hover{transform:translateY(-6px)}
-.cup-emoji{font-size:34px;margin-bottom:8px}
-.cup-title{font-weight:800;color:#222;text-align:center;font-size:15px;margin:6px 0}
-.cup-sub{font-size:13px;color:var(--muted);margin-bottom:8px}
-.btn-claim{width:100%;padding:10px 12px;border-radius:10px;border:0;background:linear-gradient(90deg,#5ec46b,#28a745);color:#fff;font-weight:800;cursor:pointer}
-.agotado{opacity:.55}
-/* ADMIN */
-.admin-panel{display:none;background:#fff;padding:10px;border-radius:10px;border:1px solid rgba(0,0,0,0.06);margin-top:16px;box-shadow:0 10px 26px rgba(0,0,0,0.06)}
-.admin-list{display:flex;flex-wrap:wrap;gap:8px;padding:6px}
-.admin-btn{padding:6px 10px;background:#ff7675;border:0;color:#fff;border-radius:8px;cursor:pointer;font-weight:700}
-/* REDEEM OVERLAY */
-.redeem-overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.2);z-index:120;opacity:0;pointer-events:none;transition:opacity .18s}
-.redeem-overlay.show{opacity:1;pointer-events:auto}
-.redeem-card{background:#fff;padding:22px;border-radius:18px;text-align:center;box-shadow:0 26px 72px rgba(13,13,16,0.12)}
-.redeem-card .big-heart{font-size:72px;color:var(--accent)}
-.redeem-card .big-text{font-family:Fraunces,serif;font-size:26px;margin-top:10px}
-/* CONFETTI CANVAS */
-#confetti{position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:110}
-/* AUDIO CONTROL */
-.audio-toggle{padding:8px 10px;border-radius:10px;border:0;background:linear-gradient(90deg,#fff8f8,#ffeef2);cursor:pointer;font-weight:700}
-/* responsive tweaks */
-@media (max-width:480px){.cup-title{font-size:14px}.btn-claim{font-size:13px}.site-title{font-size:18px}}
+  :root{
+    --bg1:#fff8fb; --bg2:#fff0f6; --accent:#ff5a7a; --accent-2:#ffb3c6; --card:#ffffff;
+    --muted:#7b7b82; --glass: rgba(255,255,255,0.65);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;font-family:Inter, Arial, Helvetica, sans-serif;background:linear-gradient(180deg,var(--bg1) 0%,var(--bg2) 100%);color:#141214;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  /* HERO / START */
+  .start-screen{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px;background:linear-gradient(180deg, rgba(255,90,122,0.08), rgba(255,179,198,0.06));z-index:60}
+  .hero-card{width:100%;max-width:920px;background:linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.7));border-radius:18px;padding:28px;border:1px solid rgba(0,0,0,0.04);box-shadow:0 18px 50px rgba(15,15,20,0.06);display:flex;gap:20px;align-items:center}
+  .hero-left{flex:1}
+  .brand{display:flex;align-items:center;gap:12px}
+  .logo{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-family:Fraunces,serif;font-size:28px;box-shadow:0 8px 26px rgba(255,90,122,0.18)}
+  .title{font-family:Fraunces, serif;font-size:28px;margin:6px 0 0;color:#3a1222}
+  .subtitle{color:var(--muted);margin-top:6px}
+  .enter-btn{margin-top:16px;padding:12px 20px;border-radius:12px;border:0;background:linear-gradient(90deg,var(--accent),#ff7a91);color:#fff;font-weight:700;cursor:pointer;box-shadow:0 10px 30px rgba(255,90,122,0.14)}
+  .enter-btn:active{transform:translateY(1px)}
+  .hero-right{width:260px;display:flex;flex-direction:column;align-items:center;gap:12px}
+  .heart-big{font-size:44px}
+  /* MAIN */
+  main{display:none;padding:20px;max-width:1100px;margin:0 auto}
+  header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .site-left{display:flex;align-items:center;gap:12px}
+  .site-title{font-family:Fraunces, serif;color:#3a1222;font-size:20px;font-weight:700}
+  .site-heart{font-size:20px;color:var(--accent);cursor:pointer;user-select:none}
+  .controls{display:flex;gap:8px;align-items:center}
+  .small-btn{padding:8px 10px;border-radius:10px;border:0;background:var(--card);box-shadow:0 8px 18px rgba(13,13,16,0.04);cursor:pointer;font-weight:700}
+  /* GRID */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:18px}
+  .card{background:var(--card);padding:14px;border-radius:14px;border:1px solid rgba(0,0,0,0.04);box-shadow:0 10px 26px rgba(13,13,16,0.04);display:flex;flex-direction:column;align-items:center;position:relative;overflow:hidden}
+  .cup-emoji{font-size:30px;margin-bottom:6px}
+  .cup-title{font-weight:800;text-align:center;color:#2b1b23;margin-bottom:6px}
+  .cup-desc{font-size:13px;color:var(--muted);margin-bottom:12px;text-align:center}
+  .btn-claim{width:100%;padding:10px;border-radius:10px;border:0;background:linear-gradient(90deg,#5ec46b,#28a745);color:#fff;font-weight:800;cursor:pointer}
+  .btn-confirm{background:linear-gradient(90deg,#ffcf5e,#e6b800);}
+  .card.agotado{opacity:.6;transform:scale(.995)}
+  .status{position:absolute;left:10px;top:10px;padding:6px 8px;border-radius:10px;background:rgba(255,90,122,0.06);font-weight:700;color:#d43a5a;font-size:12px}
+  /* modal */
+  .modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(10,10,10,0.25);z-index:80;opacity:0;pointer-events:none;transition:opacity .18s linear}
+  .modal.show{opacity:1;pointer-events:auto}
+  .modal-card{width:100%;max-width:560px;background:linear-gradient(180deg,#fff,#fff);border-radius:14px;padding:18px;border:1px solid rgba(0,0,0,0.06);box-shadow:0 26px 72px rgba(13,13,16,0.12);text-align:center}
+  .modal-title{font-family:Fraunces, serif;font-size:20px;margin-bottom:8px}
+  .modal-desc{color:var(--muted);margin-bottom:12px}
+  .big-confirm{padding:12px 16px;border-radius:12px;border:0;background:linear-gradient(90deg,#ff6b86,#ff2d6b);color:#fff;font-weight:800;cursor:pointer}
+  /* confetti canvas */
+  #confetti{position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:90}
+  /* admin panel hidden */
+  .admin-panel{display:none;background:var(--card);padding:12px;border-radius:12px;border:1px solid rgba(0,0,0,0.04);box-shadow:0 12px 38px rgba(13,13,16,0.06);margin-top:16px}
+  .admin-list{display:flex;flex-wrap:wrap;gap:8px}
+  .admin-btn{padding:8px 10px;border-radius:8px;border:0;background:linear-gradient(90deg,#ff7a91,#ff4d6d);color:#fff;font-weight:700;cursor:pointer}
+  /* responsive */
+  @media (max-width:560px){.hero-card{flex-direction:column;align-items:flex-start}.hero-right{width:100%}.title{font-size:22px}.logo{width:54px;height:54px}}
 </style>
 </head>
 <body>
-
-<!-- START SCREEN -->
-<section id="start" class="start-screen" aria-hidden="false">
-  <div class="hero">
-    <div class="bg-float" aria-hidden="true">
-      <div class="float-item" style="left:6vw;top:60%;animation-duration:14s">❤</div>
-      <div class="float-item" style="left:28vw;top:72%;animation-duration:12s">💗</div>
-      <div class="float-item" style="left:48vw;top:80%;animation-duration:16s">💖</div>
-      <div class="float-item" style="left:72vw;top:88%;animation-duration:18s">🎟️</div>
-      <div class="float-item" style="left:86vw;top:70%;animation-duration:13s">🎁</div>
-    </div>
-
-    <div style="display:flex;gap:18px;align-items:center;z-index:2">
-      <div class="logo">❤</div>
-      <div>
-        <div class="hero-title">Bienvenida a la Cuponera del Amor</div>
-        <div class="hero-sub">Pequeños gestos para ti, hecho con cariño</div>
-        <button id="enterBtn" class="enter-btn">Ingresar a la cuponera</button>
+<!-- CONFETTI CANVAS -->
+<canvas id="confetti"></canvas>
+<!-- START HERO -->
+<section id="start" class="start-screen">
+  <div class="hero-card">
+    <div class="hero-left">
+      <div class="brand">
+        <div class="logo">❤</div>
+        <div>
+          <div class="title">Cuponera del Amor</div>
+          <div class="subtitle">Detalles románticos, sorpresas para ustedes dos</div>
+        </div>
       </div>
+      <div style="margin-top:12px;color:var(--muted)">Una colección de pequeños gestos para sorprenderla. Cuando ella canjee uno, recibirás una notificación privada en tu Discord.</div>
+      <button id="enterBtn" class="enter-btn">Entrar a la cuponera</button>
+    </div>
+    <div class="hero-right">
+      <div class="heart-big">💗</div>
+      <div style="font-weight:700;color:var(--muted);text-align:center">Listo para momentos inolvidables</div>
     </div>
   </div>
 </section>
 
-<!-- LOADER (Cargando cupones) hidden by default -->
-<section id="loader" class="loader" style="display:none">
-  <div class="loader-heart">❤</div>
-  <div class="loader-text">Cargando cupones...</div>
-</section>
-
-<!-- MAIN APP -->
+<!-- MAIN CONTENT -->
 <main id="app" aria-hidden="true">
-  <header class="header">
-    <div style="display:flex;align-items:center;gap:12px"><div class="site-title">Cuponera del Amor</div><div id="titleHeart" class="site-heart" title="presiona 3 veces para opciones">❤</div></div>
+  <header>
+    <div class="site-left">
+      <div class="site-title">Cuponera del Amor</div>
+      <div id="titleHeart" class="site-heart" title="Toca 3 veces para abrir opciones">❤</div>
+    </div>
     <div class="controls">
-      <button id="resetView" class="small-btn">Ver estado</button>
+      <button id="resetView" class="small-btn" title="Ver cupones restantes">Ver estado</button>
       <button id="helpBtn" class="small-btn">Ayuda</button>
-      <button id="audioToggle" class="audio-toggle">♪</button>
     </div>
   </header>
 
-  <section id="grid" class="grid"></section>
+  <section class="grid" id="grid"></section>
 
   <div id="adminPanel" class="admin-panel" aria-hidden="true">
     <div style="font-weight:800;color:#222;margin-bottom:8px">Panel secreto — Re-stock</div>
     <div class="admin-list" id="adminList"></div>
   </div>
+
 </main>
 
-<!-- LOGIN MODAL (appears when pressing enter if not logged) -->
-<div id="loginModal" style="display:none;position:fixed;inset:0;align-items:center;justify-content:center;background:rgba(0,0,0,0.25);z-index:140">
-  <div style="background:#fff;padding:18px;border-radius:12px;max-width:360px;margin:auto;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.12)">
-    <div style="font-weight:800;font-size:18px;color:var(--accent)">Credenciales de la muñequita linda</div>
-    <div style="margin-top:12px;text-align:left">
-      <div style="font-weight:700;margin-bottom:6px">Usuario</div>
-      <input id="loginUser" style="width:100%;padding:10px;border-radius:8px;border:1px solid #eee" placeholder="Nombre" />
-      <div style="font-weight:700;margin:8px 0 6px">Clave</div>
-      <input id="loginPass" style="width:100%;padding:10px;border-radius:8px;border:1px solid #eee" placeholder="MM/DD/YYYY" />
+<!-- Modal confirm -->
+<div id="modal" class="modal" role="dialog" aria-hidden="true">
+  <div class="modal-card">
+    <div class="modal-title" id="modalTitle">Confirmar canje</div>
+    <div class="modal-desc" id="modalDesc">¿Deseas canjear este cupón?</div>
+    <div style="display:flex;gap:10px;justify-content:center;margin-top:12px">
+      <button id="modalCancel" class="small-btn">Cancelar</button>
+      <button id="modalConfirm" class="big-confirm">Sí, canjear</button>
     </div>
-    <div style="display:flex;gap:10px;justify-content:center;margin-top:14px">
-      <button id="loginCancel" class="small-btn">Cancelar</button>
-      <button id="loginSubmit" class="enter-btn">Ingresar</button>
-    </div>
-    <div style="margin-top:10px;color:var(--muted);font-size:13px">Usuario: <strong>Sofia</strong> • Clave: <strong>12/15/2025</strong></div>
   </div>
 </div>
 
-<!-- REDEEM OVERLAY -->
-<div id="redeemOverlay" class="redeem-overlay"><div class="redeem-card"><div class="big-heart">❤</div><div class="big-text">Canjeado con éxito!</div></div></div>
-
-<!-- CONFETTI CANVAS -->
-<canvas id="confetti"></canvas>
-
-<!-- AUDIO -->
-<audio id="bgAudio" loop preload="none">
-  <source src="https://drive.google.com/uc?export=download&id=1Dx5JaKuDL3OmWD3sIMhf0SGot2lMjbXB&t=1" type="audio/mpeg">
-</audio>
-
 <script>
-/* =================== CONFIG =================== */
-const WEBHOOK_URL = "https://discord.com/api/webhooks/1443241851032309854/c-DNoO_Dr8WEDAKtxfrCIt4GALrC_SZDZLqNXgQvrYyFSzC6z98e3wxsYkiRkoXUjlmk";
-const LS_KEY = 'cuponera_final_v3';
-const LOGIN_USER = 'Sofia';
-const LOGIN_PASS = '12/15/2025';
+/* ==================== CONFIG ==================== */
+const WEBHOOK_URL = "https://discord.com/api/webhooks/1443241851032309854/c-DNoO_Dr8WEDAKtxfrCIt4GALrC_SZDZLqNXgQvrYyFSzC6z98e3wxsYkiRkoXUjlmk"; // tu webhook ya incluido
+const LS_KEY = 'cuponera_premium_v1';
 
-/* =================== COUPONS (with emojis requested) =================== */
+/* ==================== DATA (14 cupones) ==================== */
 const COUPONS = [
-  {emoji:'💋', title:'Un beso donde tú quieras', desc:''},
-  {emoji:'💆', title:'Masajito relajante', desc:''},
-  {emoji:'🍽️', title:'Cena hecha por mí', desc:''},
-  {emoji:'🎬', title:'Película que tú elijas', desc:''},
-  {emoji:'🤗', title:'Un abrazo largo', desc:''},
-  {emoji:'😘', title:'Un piquito sorpresa', desc:''},
-  {emoji:'🌙', title:'Noche romántica contigo', desc:''},
-  {emoji:'🌹', title:'Detalles lindos para ti', desc:''},
-  {emoji:'🎮', title:'Tarde de videojuegos', desc:''},
-  {emoji:'🎨', title:'Para pintar cuadros', desc:''},
-  {emoji:'🧖‍♀️', title:'Día de skin care', desc:''},
-  {emoji:'🍰', title:'Consentirte con un postre', desc:''},
-  {emoji:'🎁', title:'Un regalito sorpresa', desc:''},
-  {emoji:'🔁', title:'Repetir cualquier cupón', desc:''}
+  {emoji:'🎬',title:'Para una tarde de películas',desc:'Palomitas y sofá'},
+  {emoji:'🎮',title:'Para una tarde de videojuegos',desc:'Tu elección de juego'},
+  {emoji:'🎨',title:'Para pintar cuadros',desc:'Pintura y lienzos'},
+  {emoji:'🧖‍♀️',title:'Para un día de skin care',desc:'Tiempo de mimos'},
+  {emoji:'💆‍♂️',title:'Para un masaje con final feliz',desc:'Relajación total'},
+  {emoji:'🍰',title:'Para consentirte un día',desc:'Dulces y detalles'},
+  {emoji:'🤗',title:'Válido por 20 abrazos',desc:'Abrazos interminables'},
+  {emoji:'🎁',title:'Para un regalo',desc:'Sorpresa especial'},
+  {emoji:'🌞',title:'Por un día hacer lo que quieras',desc:'Tu día, tus reglas'},
+  {emoji:'💋',title:'Por un besito',desc:'Beso dulce'},
+  {emoji:'🎞️',title:'Para ir al cine',desc:'Palomitas y pantalla grande'},
+  {emoji:'🛍️',title:'Compras en Temu',desc:'Pequeña compra'},
+  {emoji:'💳',title:'Comprarte lo que quieras',desc:'Capricho permitido'},
+  {emoji:'🔁',title:'Repetir cualquier cupón',desc:'Repite tu favorito'}
 ];
 
-/* =================== STATE =================== */
-let state = {}; const saved = localStorage.getItem(LS_KEY);
-if(saved){ try{ const parsed = JSON.parse(saved); state = parsed.state || {}; }catch(e){ state = {}; }}
+/* ==================== STATE ==================== */
+let state = {}; // index => 'available'|'confirm'|'redeemed'
+const saved = localStorage.getItem(LS_KEY);
+if(saved){ try{ state = JSON.parse(saved); }catch(e){ state = {}; }}
 COUPONS.forEach((_,i)=>{ if(!(i in state)) state[i] = 'available'; });
 
 /* DOM refs */
 const start = document.getElementById('start');
 const enterBtn = document.getElementById('enterBtn');
-const loader = document.getElementById('loader');
 const app = document.getElementById('app');
 const grid = document.getElementById('grid');
-const loginModal = document.getElementById('loginModal');
-const loginUser = document.getElementById('loginUser');
-const loginPass = document.getElementById('loginPass');
-const loginSubmit = document.getElementById('loginSubmit');
-const loginCancel = document.getElementById('loginCancel');
-const redeemOverlay = document.getElementById('redeemOverlay');
+const titleHeart = document.getElementById('titleHeart');
 const adminPanel = document.getElementById('adminPanel');
 const adminList = document.getElementById('adminList');
-const titleHeart = document.getElementById('titleHeart');
-const bgAudio = document.getElementById('bgAudio');
-const audioToggle = document.getElementById('audioToggle');
+const modal = document.getElementById('modal');
+const modalTitle = document.getElementById('modalTitle');
+const modalDesc = document.getElementById('modalDesc');
+const modalConfirm = document.getElementById('modalConfirm');
+const modalCancel = document.getElementById('modalCancel');
+const confettiCanvas = document.getElementById('confetti');
 
-/* AUDIO: set low volume */
-bgAudio.volume = 0.18;
-
-/* ENTER behavior: show login if not logged; else go to loader -> main */
-enterBtn.addEventListener('click', ()=>{
-  const logged = localStorage.getItem('cuponera_logged_v3');
-  if(logged==='true'){
-    // show loader then open
-    showLoaderThenOpen();
-  } else {
-    loginModal.style.display = 'flex';
-  }
-});
-
-/* login actions */
-loginCancel.addEventListener('click', ()=>{ loginModal.style.display='none'; });
-loginSubmit.addEventListener('click', attemptLogin);
-loginPass.addEventListener('keydown', (e)=>{ if(e.key==='Enter') attemptLogin(); });
-function attemptLogin(){ const u = loginUser.value.trim(); const p = loginPass.value.trim(); if(u.toLowerCase()===LOGIN_USER.toLowerCase() && p===LOGIN_PASS){ localStorage.setItem('cuponera_logged_v3','true'); loginModal.style.display='none'; showLoaderThenOpen(); } else { alert('Credenciales incorrectas, mi amor ❤️'); } }
-
-/* loader then open main */
-function showLoaderThenOpen(){ loader.style.display='flex'; // play audio once user interacted
- bgAudio.play().catch(()=>{});
- setTimeout(()=>{ loader.style.display='none'; openMain(); }, 1400); }
-
-/* open main */
-function openMain(){ start.style.display='none'; app.style.display='block'; renderGrid(); }
+/* enter */
+enterBtn.addEventListener('click', ()=>{ start.style.display='none'; openMain(); });
+function openMain(){ app.style.display='block'; app.setAttribute('aria-hidden','false'); renderGrid(); }
 
 /* render grid */
-function renderGrid(){ grid.innerHTML=''; COUPONS.forEach((c,i)=>{ const s = state[i]; const card = document.createElement('article'); card.className = 'card' + (s==='redeemed'?' agotado':''); const emoji = document.createElement('div'); emoji.className='cup-emoji'; emoji.textContent = c.emoji; const title = document.createElement('div'); title.className='cup-title'; title.textContent = c.title; const sub = document.createElement('div'); sub.className='cup-sub'; sub.textContent = s==='available' ? 'Stock: 1 disponible' : (s==='redeemed'?'Canjeado':'Confirmar'); const btn = document.createElement('button'); btn.className='btn-claim'; btn.textContent = s==='available' ? 'Canjear' : (s==='confirm' ? 'Confirmar' : ''); if(s==='redeemed') btn.style.display='none'; btn.addEventListener('click', ()=>{ if(state[i]==='available'){ state[i] = 'confirm'; saveState(); } else if(state[i]==='confirm'){ state[i] = 'redeemed'; saveState(); onRedeem(i); } }); card.appendChild(emoji); card.appendChild(title); card.appendChild(sub); card.appendChild(btn); grid.appendChild(card); }); renderAdminList(); }
+function renderGrid(){ grid.innerHTML=''; COUPONS.forEach((c,i)=>{
+  const s = state[i];
+  const card = document.createElement('article'); card.className='card'+(s==='redeemed'?' agotado':'');
+  const emoji = document.createElement('div'); emoji.className='cup-emoji'; emoji.textContent=c.emoji;
+  const t = document.createElement('div'); t.className='cup-title'; t.textContent=c.title;
+  const d = document.createElement('div'); d.className='cup-desc'; d.textContent=c.desc;
+  const btn = document.createElement('button'); btn.className='btn-claim'; btn.id='btn_'+i;
+  const status = document.createElement('div'); status.className='status';
+  if(s==='available'){ btn.textContent='Canjear'; status.textContent='Disponible'; }
+  else if(s==='confirm'){ btn.textContent='Confirmar'; btn.classList.add('btn-confirm'); status.textContent='Confirmación pendiente'; }
+  else if(s==='redeemed'){ btn.style.display='none'; status.textContent='Canjeado'; }
+
+  btn.addEventListener('click', ()=>{
+    if(state[i]==='available'){ state[i]='confirm'; saveState(); }
+    else if(state[i]==='confirm'){ // open modal to confirm
+      showModal(i);
+    }
+  });
+
+  card.appendChild(status); card.appendChild(emoji); card.appendChild(t); card.appendChild(d); card.appendChild(btn);
+  grid.appendChild(card);
+});
+renderAdminList(); }
 
 /* save */
-function saveState(){ localStorage.setItem(LS_KEY, JSON.stringify({state})); renderGrid(); }
+function saveState(){ localStorage.setItem(LS_KEY, JSON.stringify(state)); renderGrid(); }
 
-/* on redeem: show effects + webhook */
-function onRedeem(i){ showRedeemOverlay(); launchConfetti(); playPop(); sendDiscord(i); setTimeout(()=>{ hideRedeemOverlay(); },2000); }
-function showRedeemOverlay(){ redeemOverlay.classList.add('show'); }
-function hideRedeemOverlay(){ redeemOverlay.classList.remove('show'); }
+/* modal handling */
+let currentIndex = null;
+function showModal(index){ currentIndex = index; modalTitle.textContent = 'Confirmar canje'; modalDesc.textContent = `¿Deseas canjear: "${COUPONS[index].title}" ?`;
+ modal.classList.add('show'); modal.setAttribute('aria-hidden','false'); }
+modalCancel.addEventListener('click', ()=>{ modal.classList.remove('show'); modal.setAttribute('aria-hidden','true'); currentIndex=null; });
+modalConfirm.addEventListener('click', ()=>{
+  if(currentIndex===null) return; state[currentIndex] = 'redeemed'; saveState(); modal.classList.remove('show'); modal.setAttribute('aria-hidden','true'); triggerEffects(currentIndex); sendDiscord(currentIndex); currentIndex=null;
+});
 
-/* confetti */
-const confettiCanvas = document.getElementById('confetti'); const confettiCtx = confettiCanvas.getContext('2d'); function resizeCanvas(){ confettiCanvas.width = window.innerWidth; confettiCanvas.height = window.innerHeight; } window.addEventListener('resize', resizeCanvas); resizeCanvas(); let confettiPieces = []; function launchConfetti(){ confettiPieces = []; const count = 80; for(let i=0;i<count;i++){ confettiPieces.push({x:Math.random()*confettiCanvas.width, y:-Math.random()*confettiCanvas.height, r:4+Math.random()*8, vx:(Math.random()-0.5)*6, vy:2+Math.random()*6, color:['#ff6b86','#ffd1df','#ffd27a','#ff9fbf'][Math.floor(Math.random()*4)], ttl:200}); } animate(); function animate(){ confettiCtx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height); confettiPieces.forEach((p)=>{ p.x += p.vx; p.y += p.vy; p.ttl--; confettiCtx.fillStyle = p.color; confettiCtx.beginPath(); confettiCtx.ellipse(p.x,p.y,p.r,p.r*0.6,0,0,Math.PI*2); confettiCtx.fill(); }); confettiPieces = confettiPieces.filter(p=>p.ttl>0 && p.y<confettiCanvas.height+100); if(confettiPieces.length>0) requestAnimationFrame(animate); } }
+/* admin panel render */
+function renderAdminList(){ adminList.innerHTML=''; COUPONS.forEach((c,i)=>{
+  const b = document.createElement('button'); b.className='admin-btn'; b.textContent = `${i+1}. ${c.title}`;
+  b.addEventListener('click', ()=>{
+    if(confirm(`Restablecer "${c.title}" a Disponible?`)){
+      state[i] = 'available'; saveState(); alert('Restablecido.');
+    }
+  });
+  adminList.appendChild(b);
+}); }
 
-/* pop sound */
+/* secret: show admin after 3 quick taps */
+let clicks=[]; titleHeart.addEventListener('click', ()=>{ const now=Date.now(); clicks.push(now); if(clicks.length>3) clicks.shift(); if(clicks.length===3 && (clicks[2]-clicks[0])<700){
+  if(adminPanel.style.display==='block'){ adminPanel.style.display='none'; adminPanel.setAttribute('aria-hidden','true'); }
+  else{ adminPanel.style.display='block'; adminPanel.setAttribute('aria-hidden','false'); adminPanel.scrollIntoView({behavior:'smooth',block:'center'}); }
+}});
+
+/* effects: confetti + sound */
+function triggerEffects(idx){ launchConfetti(); playPop(); showToast(`Canjeado: ${COUPONS[idx].title}`); }
+
+/* simple toast */
+function showToast(text){ const el = document.createElement('div'); el.style.position='fixed'; el.style.right='18px'; el.style.bottom='18px'; el.style.background='linear-gradient(90deg,#ff7a91,#ff4d6d)'; el.style.color='#fff'; el.style.padding='10px 14px'; el.style.borderRadius='12px'; el.style.boxShadow='0 10px 30px rgba(0,0,0,0.12)'; el.style.fontWeight='700'; el.textContent=text; document.body.appendChild(el); setTimeout(()=> el.style.opacity='0',2200); setTimeout(()=> el.remove(),2600); }
+
+/* minimal confetti implementation */
+const confettiCtx = confettiCanvas.getContext('2d');
+function resizeCanvas(){ confettiCanvas.width = window.innerWidth; confettiCanvas.height = window.innerHeight; }
+window.addEventListener('resize', resizeCanvas); resizeCanvas();
+let confettiPieces = [];
+function launchConfetti(){ confettiPieces = []; const count = 90; for(let i=0;i<count;i++){ confettiPieces.push({x:Math.random()*confettiCanvas.width, y:-Math.random()*confettiCanvas.height, r:4+Math.random()*8, d:Math.random()*50+2, tilt:Math.random()*20-10, color:['#ff6b86','#ffd1df','#ffd27a','#ff9fbf'][Math.floor(Math.random()*4)], vx:(Math.random()-0.5)*6, vy:2+Math.random()*6, ttl:200}); }
+ animateConfetti(); }
+let confettiRAF=null;
+function animateConfetti(){ if(confettiRAF) cancelAnimationFrame(confettiRAF); function frame(){ confettiCtx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height);
+ confettiPieces.forEach((p)=>{ p.x += p.vx; p.y += p.vy; p.tilt += 0.5; p.vy += 0.03; p.ttl--; confettiCtx.fillStyle = p.color; confettiCtx.beginPath(); confettiCtx.ellipse(p.x, p.y, p.r, p.r*0.6, p.tilt*Math.PI/180, 0, Math.PI*2); confettiCtx.fill(); });
+ confettiPieces = confettiPieces.filter(p=>p.ttl>0 && p.y < confettiCanvas.height + 100);
+ if(confettiPieces.length>0) confettiRAF = requestAnimationFrame(frame); else cancelAnimationFrame(confettiRAF);
+ }
+ frame(); }
+
+/* sound using WebAudio */
 function playPop(){ try{ const ctx = new (window.AudioContext||window.webkitAudioContext)(); const o = ctx.createOscillator(); const g = ctx.createGain(); o.type='sine'; o.frequency.value=880; g.gain.value=0.0001; o.connect(g); g.connect(ctx.destination); o.start(); g.gain.exponentialRampToValueAtTime(0.12, ctx.currentTime + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.28); o.stop(ctx.currentTime + 0.3);}catch(e){}
 }
 
-/* device detect for discord message */
+/* Device friendly detection */
 function detectDevice(){ const ua = navigator.userAgent || navigator.vendor || window.opera; if(/android/i.test(ua)) return 'Móvil (Android)'; if(/iPhone|iPad|iPod/i.test(ua)) return 'Móvil (iOS)'; return 'Escritorio'; }
 
-/* send discord */
-function sendDiscord(index){ const coupon = COUPONS[index]; const now = new Date(); const fecha = now.toLocaleDateString(); const hora = now.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}); const dispositivo = detectDevice(); const content = `💖 *Cupón canjeado* 💖\n**Cupón:** ${coupon.title}\n**Fecha:** ${fecha}\n**Hora:** ${hora}\n**Dispositivo:** ${dispositivo}\n**Estado:** CANJEADO ✔️`; fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content})}).catch(e=>console.warn('webhook',e)); }
+/* send discord notification (informativo con fecha/hora y dispositivo) */
+function sendDiscord(index){
+  const coupon = COUPONS[index];
+  const now = new Date();
+  const fecha = now.toLocaleDateString();
+  const hora = now.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+  const dispositivo = detectDevice();
+  const content = `💖 *Cupón canjeado* 💖\n**Cupón:** ${coupon.title}\n**Fecha:** ${fecha}\n**Hora:** ${hora}\n**Dispositivo:** ${dispositivo}\n**Estado:** CANJEADO ✔️`;
+  // POST to webhook
+  fetch(WEBHOOK_URL, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content})}).catch(e=>{console.warn('No se pudo enviar webhook',e)});
+}
 
-/* admin panel render */
-function renderAdminList(){ adminList.innerHTML=''; COUPONS.forEach((c,i)=>{ const b = document.createElement('button'); b.className='admin-btn'; b.textContent = `${i+1}. ${c.title}`; b.addEventListener('click', ()=>{ if(confirm(`Restablecer "${c.title}" a Disponible?`)){ state[i] = 'available'; saveState(); alert('Restablecido.'); } }); adminList.appendChild(b); }); }
-
-/* secret panel: triple click on heart */
-let clicks=[]; titleHeart.addEventListener('click', ()=>{ const now = Date.now(); clicks.push(now); if(clicks.length>3) clicks.shift(); if(clicks.length===3 && (clicks[2]-clicks[0])<700){ if(adminPanel.style.display==='block'){ adminPanel.style.display='none'; adminPanel.setAttribute('aria-hidden','true'); } else { adminPanel.style.display='block'; adminPanel.setAttribute('aria-hidden','false'); adminPanel.scrollIntoView({behavior:'smooth',block:'center'}); } }});
-
-/* audio toggle */
-audioToggle.addEventListener('click', ()=>{ if(bgAudio.paused){ bgAudio.play().catch(()=>{}); audioToggle.textContent='▮▮'; } else { bgAudio.pause(); audioToggle.textContent='♪'; }});
-
-/* visible helpers */
-document.getElementById('resetView').addEventListener('click', ()=>{ let avail=0; Object.values(state).forEach(s=>{ if(s==='available') avail++; }); alert(avail + ' cupones disponibles'); });
-document.getElementById('helpBtn').addEventListener('click', ()=>{ alert('Toca un cupón para iniciar canje; confirma para canjear. Toca 3 veces el corazón superior para abrir el panel secreto.'); });
+/* small helpers */
+function clearAll(){ if(confirm('Resetear todos los cupones a Disponible?')){ COUPONS.forEach((_,i)=>state[i]='available'); saveState(); alert('Todos restablecidos'); }}
 
 /* init */
-(function init(){ renderGrid(); // if user previously logged, show start but Enter will skip login because logic checks storage
+(function init(){ app.style.display='none'; renderGrid(); document.getElementById('resetView').addEventListener('click', ()=>{ let count=0; Object.values(state).forEach(s=>{ if(s==='available') count++; }); alert(count + ' cupones disponibles'); }); document.getElementById('helpBtn').addEventListener('click', ()=>{ alert('Toca un cupón para iniciar canje; confirma para canjear. Toca 3 veces el corazón superior para abrir el panel secreto.'); });
 })();
 
-/* expose reset */
-window.resetAllCupones = function(){ COUPONS.forEach((_,i)=> state[i] = 'available'); saveState(); };
+/* expose reset to console if needed */
+window.resetAllCupones = clearAll;
 
 </script>
 </body>
